@@ -1,6 +1,6 @@
 #define MyAppName "SillyPutty"
 #ifndef MyAppVersion
-  #define MyAppVersion "0.2.0-alpha"
+  #define MyAppVersion "0.2.1-alpha"
 #endif
 #define MyAppPublisher "CtrlAltWiz"
 #define MyAppExeName "SillyPutty.exe"

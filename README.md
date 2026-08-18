@@ -4,7 +4,7 @@
 
 <img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> The app spots whether you're on Windows, Linux, or macOS as soon as you connect and then whips up a session-tool palette packed with commands that actually make sense for your platform. If it stumbles upon an unfamiliar SSH platform, it just shrugs and defaults to a generic appliance profile for switches, routers, and firewalls. And if you’re feeling rebellious, the Platform menu lets you override its guesswork whenever you want.
 
-> **Project status:** `0.2.0-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
+> **Project status:** `0.2.1-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
 
 ## Highlights
 
@@ -14,7 +14,7 @@
 - SSH host-key warnings and configurable identity files
 - Windows, Linux, macOS, and generic network-appliance tool palettes
 - Named session profiles that never store passwords
-- Live local file browser synchronized with directory changes
+- Live local file browser plus remote folder navigation over an authenticated SSH session
 - PuTTY-style categorized configuration with persistent defaults
 - Authorized RFC 1918 `/24` discovery, hostname/MAC checks, common-service detection, cancellation, and CSV export
 - Optional Wireshark/TShark/Npcap capture and PCAP integration
@@ -43,13 +43,13 @@ SillyPutty does not silently download, install, or elevate external tools. Check
 
 ### Download for Windows
 
-Download SillyPutty `v0.2.0-alpha` directly:
+Download SillyPutty `v0.2.1-alpha` directly:
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SillyPutty-0.2.0-alpha-Setup.exe)** — recommended for most users; installs SillyPutty and creates Start Menu shortcuts.
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.1-alpha/SillyPutty-0.2.1-alpha-Setup.exe)** — recommended for most users; installs SillyPutty and creates Start Menu shortcuts.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SillyPutty-0.2.0-alpha-win-x64.zip)** — extract the archive, then run `SillyPutty.exe`; no .NET installation is required.
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.1-alpha/SillyPutty-0.2.1-alpha-win-x64.zip)** — extract the archive, then run `SillyPutty.exe`; no .NET installation is required.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.1-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
 
 See the [GitHub Releases page](https://github.com/CtrlAltWiz/SillyPutty/releases) for release notes and future versions. Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
 
@@ -131,7 +131,7 @@ External applications—including PuTTY, Nmap, Wireshark, TShark, and Npcap—ar
 
 ## Quick tips
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Double-click on folders to switch the local terminal directory; double-click files to open them with Windows.
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Double-click folders to switch directories. SSH sessions can browse remote folders after sign-in; remote file opening and downloads remain planned.
 
 <img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Type commands at the bottom of the terminal. Use the Up/Down arrows to browse command history.
 
