@@ -45,9 +45,11 @@ SillyPutty does not silently download, install, or elevate external tools. Check
 
 Download SillyPutty `v0.2.0-alpha` directly:
 
-- **[Windows installer](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SillyPutty-0.2.0-alpha-Setup.exe)** — recommended for most users; installs SillyPutty and creates Start Menu shortcuts.
-- **[Portable ZIP](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SillyPutty-0.2.0-alpha-win-x64.zip)** — extract the archive, then run `SillyPutty.exe`; no .NET installation is required.
-- **[SHA-256 checksums](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SillyPutty-0.2.0-alpha-Setup.exe)** — recommended for most users; installs SillyPutty and creates Start Menu shortcuts.
+
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SillyPutty-0.2.0-alpha-win-x64.zip)** — extract the archive, then run `SillyPutty.exe`; no .NET installation is required.
+
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
 
 See the [GitHub Releases page](https://github.com/CtrlAltWiz/SillyPutty/releases) for release notes and future versions. Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
 
@@ -93,10 +95,13 @@ The packaging script supports an optional trusted code-signing certificate thumb
 
 Keyboard shortcuts:
 
-- `Ctrl+T` — new session tab
-- `Ctrl+W` — close active tab
-- `Ctrl+Tab` / `Ctrl+Shift+Tab` — switch tabs
-- `Up` / `Down` — command history
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+T` — new session tab
+
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+W` — close active tab
+
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+Tab` / `Ctrl+Shift+Tab` — switch tabs
+
+<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Up` / `Down` — command history
 
 ## Plugins
 
