@@ -43,10 +43,13 @@ SillyPutty does not silently download, install, or elevate external tools. Check
 
 ### Download for Windows
 
-Download the newest build from the [GitHub Releases page](https://github.com/CtrlAltWiz/SillyPutty/releases). Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
+Download SillyPutty `v0.2.0-alpha` directly:
 
-- **Setup EXE** — recommended for most users; installs SillyPutty and creates Start Menu shortcuts.
-- **Portable ZIP** — extract the archive, then run `SillyPutty.exe`; no .NET installation is required.
+- **[Windows installer](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SillyPutty-0.2.0-alpha-Setup.exe)** — recommended for most users; installs SillyPutty and creates Start Menu shortcuts.
+- **[Portable ZIP](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SillyPutty-0.2.0-alpha-win-x64.zip)** — extract the archive, then run `SillyPutty.exe`; no .NET installation is required.
+- **[SHA-256 checksums](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.0-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
+
+See the [GitHub Releases page](https://github.com/CtrlAltWiz/SillyPutty/releases) for release notes and future versions. Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
 
 Early alpha, beta, and release-candidate builds appear under **Pre-releases**. Windows may show an unknown-publisher warning until release binaries are code-signed.
 
