@@ -44,8 +44,11 @@
    </StackPanel>
   </ScrollViewer>
   <DockPanel Grid.Row="2" Margin="0,14,0,0">
-   <TextBlock Text="Tip: hover over a tool button to see the command it runs." Foreground="#8495A7" VerticalAlignment="Center"/>
    <Button Content="Close" DockPanel.Dock="Right" IsDefault="True" IsCancel="True" Click="Close_Click" Background="#176B50" Padding="18,7"/>
+   <StackPanel VerticalAlignment="Center">
+    <TextBlock Text="Tip: hover over a tool button to see the command it runs." Foreground="#8495A7"/>
+    <TextBlock Text="Curiously crafted by CtrlAltWiz (c) 2026" Foreground="#8495A7" FontSize="11" Margin="0,4,0,0"/>
+   </StackPanel>
   </DockPanel>
  </Grid>
 </Window>
