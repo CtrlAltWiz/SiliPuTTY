@@ -1,0 +1,25 @@
+name: build
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  windows:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Build
+        run: dotnet build SillyPutty.csproj -c Release
+      - name: Test
+        run: dotnet run --project tests/SillyPutty.Tests/SillyPutty.Tests.csproj -c Release
+      - name: Publish portable build
+        run: dotnet publish SillyPutty.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o artifacts/SillyPutty-win-x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SillyPutty-win-x64
+          path: artifacts/SillyPutty-win-x64/
