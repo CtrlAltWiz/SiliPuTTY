@@ -18,6 +18,7 @@ coverage/
 # Packages and publish output
 packages/
 publish/
+artifacts/
 *.nupkg
 
 # OS-generated files
