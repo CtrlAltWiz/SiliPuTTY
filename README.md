@@ -41,6 +41,15 @@ SillyPutty does not silently download, install, or elevate external tools. Check
 
 ## Getting started
 
+### Download for Windows
+
+Download the newest build from the [GitHub Releases page](https://github.com/CtrlAltWiz/SillyPutty/releases). Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
+
+- **Setup EXE** — recommended for most users; installs SillyPutty and creates Start Menu shortcuts.
+- **Portable ZIP** — extract the archive, then run `SillyPutty.exe`; no .NET installation is required.
+
+Early alpha, beta, and release-candidate builds appear under **Pre-releases**. Windows may show an unknown-publisher warning until release binaries are code-signed.
+
 ### Run from source
 
 Install the .NET 10 SDK, clone the repository, and run:

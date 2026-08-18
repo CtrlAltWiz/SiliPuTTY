@@ -4,6 +4,7 @@
 - [x] Dependency-free smoke tests pass
 - [x] Self-contained `win-x64` package builds and launches
 - [x] GitHub Actions build/test/publish workflow exists
+- [x] Tag-driven GitHub Releases publish a portable ZIP, installer, and SHA-256 checksums
 - [x] Crash diagnostics write to `%LOCALAPPDATA%\SillyPutty\CrashLogs`
 - [x] Capability matrix distinguishes active and planned settings
 - [x] Plugin manifests require validation and explicit enablement
