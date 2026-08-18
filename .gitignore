@@ -1,0 +1,26 @@
+# .NET build output
+bin/
+obj/
+
+# Visual Studio and user settings
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Test and coverage output
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Packages and publish output
+packages/
+publish/
+*.nupkg
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+Desktop.ini

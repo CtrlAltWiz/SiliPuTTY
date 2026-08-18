@@ -1,0 +1,68 @@
+<Window x:Class="SillyPutty.MainWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ Title="SillyPutty" Width="1260" Height="800" MinWidth="950" MinHeight="620"
+ Background="#0B1117" Foreground="#E8F1F8" FontFamily="Segoe UI">
+ <Grid Margin="10">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <Border Grid.Row="0" Background="{StaticResource Panel}" CornerRadius="8" Padding="10" Margin="0,0,0,8">
+   <DockPanel>
+    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+     <TextBlock Text="SILLY" FontWeight="Bold" FontSize="20" Foreground="{StaticResource Accent}" VerticalAlignment="Center"/>
+     <TextBlock Text="PUTTY" FontWeight="Bold" FontSize="20" VerticalAlignment="Center" Margin="4,0,20,0"/>
+     <ComboBox x:Name="SessionType" Width="145" SelectedIndex="0" Margin="0,0,6,0">
+      <ComboBoxItem Content="Local PowerShell"/><ComboBoxItem Content="Kali (WSL)"/><ComboBoxItem Content="SSH"/>
+     </ComboBox>
+     <TextBox x:Name="HostBox" Width="185" Text="user@host" ToolTip="SSH user@host" Margin="0,0,6,0"/>
+     <Button Content="Connect" Click="Connect_Click" Background="#176B50"/>
+     <Button Content="Disconnect" Click="Disconnect_Click"/>
+     <TextBlock Text="Platform:" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Margin="12,0,5,0"/>
+     <ComboBox x:Name="PlatformSelector" Width="105" SelectedIndex="0" SelectionChanged="PlatformSelector_SelectionChanged">
+      <ComboBoxItem Content="Auto"/><ComboBoxItem Content="Default"/><ComboBoxItem Content="Windows"/><ComboBoxItem Content="Linux"/><ComboBoxItem Content="macOS"/>
+     </ComboBox>
+     <Button Content="? Help" Click="Help_Click" Margin="8,3,3,3" Padding="10,5"/>
+     <Ellipse x:Name="StatusDot" Width="9" Height="9" Fill="#E0A22B" Margin="12,0,5,0"/>
+     <TextBlock x:Name="StatusText" Text="Ready" VerticalAlignment="Center" Foreground="{StaticResource Muted}"/>
+    </StackPanel>
+    <TextBlock Text="Use security tools only on systems you own or are authorized to test." Foreground="#E0A22B" VerticalAlignment="Center" HorizontalAlignment="Right" FontSize="12"/>
+   </DockPanel>
+  </Border>
+  <Grid Grid.Row="1">
+   <Grid.ColumnDefinitions><ColumnDefinition Width="1.65*" MinWidth="450"/><ColumnDefinition Width="5"/><ColumnDefinition Width="*" MinWidth="330"/></Grid.ColumnDefinitions>
+   <Border Grid.Column="0" Background="{StaticResource Panel}" CornerRadius="8" Padding="12">
+    <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+     <DockPanel Margin="2,0,2,10"><TextBlock Text="TERMINAL" FontWeight="SemiBold"/><Button Content="Clear" DockPanel.Dock="Right" Padding="8,2" Click="Clear_Click"/></DockPanel>
+     <TextBox x:Name="TerminalOutput" Grid.Row="1" IsReadOnly="True" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+      FontFamily="Cascadia Mono,Consolas" FontSize="13" Background="#070B0F" BorderThickness="0" TextWrapping="NoWrap"/>
+     <Grid Grid.Row="2" Margin="0,9,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+      <TextBlock x:Name="PromptText" Text="PS›" Foreground="{StaticResource Accent}" FontFamily="Consolas" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0"/>
+      <TextBox x:Name="CommandBox" Grid.Column="1" FontFamily="Cascadia Mono,Consolas" KeyDown="CommandBox_KeyDown"/>
+      <Button Grid.Column="2" Content="Run ↵" Background="#176B50" Click="Run_Click"/>
+     </Grid>
+    </Grid>
+   </Border>
+   <GridSplitter Grid.Column="1" Width="5" Background="Transparent" HorizontalAlignment="Stretch"/>
+   <Grid Grid.Column="2"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="1.15*"/><RowDefinition Height="8"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+    <Border Grid.Row="0" Background="{StaticResource Panel}" CornerRadius="8,8,0,0" Padding="10">
+     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+      <StackPanel Orientation="Horizontal"><TextBlock Text="SESSION TOOLS" FontWeight="SemiBold" VerticalAlignment="Center"/><Border Background="#203243" CornerRadius="9" Margin="8,0,0,0" Padding="7,2"><TextBlock x:Name="DetectedPlatformText" Text="Windows" Foreground="{StaticResource Accent}" FontSize="11"/></Border></StackPanel>
+      <TextBox x:Name="TargetBox" Grid.Column="1" Margin="12,0,0,0" Text="" ToolTip="Target hostname, IP, URL, or domain"/>
+     </Grid>
+    </Border>
+    <ScrollViewer Grid.Row="1" Background="{StaticResource Panel}" VerticalScrollBarVisibility="Auto">
+     <WrapPanel x:Name="ToolsPanel" Margin="8"/>
+    </ScrollViewer>
+    <Border Grid.Row="3" Background="{StaticResource Panel}" CornerRadius="8" Padding="10">
+     <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+      <DockPanel><TextBlock Text="FILES" FontWeight="SemiBold" VerticalAlignment="Center"/><Button Content="↻" DockPanel.Dock="Right" Padding="8,2" Click="Refresh_Click"/></DockPanel>
+      <TextBlock x:Name="PathText" Grid.Row="1" TextTrimming="CharacterEllipsis" Foreground="{StaticResource Muted}" Margin="0,6"/>
+      <ListView x:Name="FileList" Grid.Row="2" Background="#0B1117" BorderThickness="0" MouseDoubleClick="FileList_DoubleClick">
+       <ListView.View><GridView><GridViewColumn Header="Name" Width="235" DisplayMemberBinding="{Binding Name}"/><GridViewColumn Header="Type" Width="70" DisplayMemberBinding="{Binding Kind}"/></GridView></ListView.View>
+      </ListView>
+     </Grid>
+    </Border>
+   </Grid>
+  </Grid>
+  <TextBlock Grid.Row="2" Text="Enter runs a command • ↑/↓ command history • Double-click a folder to change directory" Foreground="{StaticResource Muted}" Margin="5,7,0,0"/>
+ </Grid>
+</Window>
