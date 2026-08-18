@@ -1,8 +1,8 @@
-# SillyPutty
+# What on Earth is SillyPutty?!
 
-A native Windows terminal dashboard inspired by PuTTY, with local PowerShell, Kali Linux via WSL, SSH command execution, one-click Kali tools, and a live synchronized file browser.
+SillyPutty is like PuTTY’s quirky cousin for Windows terminals, packing local PowerShell, Kali Linux through WSL, SSH command magic, one-click Kali gadget access, and a live file browser that’s always in sync.
 
-SillyPutty automatically detects Windows, Linux, or macOS when connecting and rebuilds its session-tool palette with platform-appropriate commands. Unknown SSH platforms fall back to a neutral Default appliance profile for switches, routers, and firewalls. The Platform menu can override detection at any time.
+The app spots whether you're on Windows, Linux, or macOS as soon as you connect and then whips up a session-tool palette packed with commands that actually make sense for your platform. If it stumbles upon an unfamiliar SSH platform, it just shrugs and defaults to a generic appliance profile for switches, routers, and firewalls. And if you’re feeling rebellious, the Platform menu lets you override its guesswork whenever you want.
 
 ## Run
 
@@ -10,12 +10,12 @@ SillyPutty automatically detects Windows, Linux, or macOS when connecting and re
 dotnet run --project .\SillyPutty.csproj
 ```
 
-For Kali mode, install Kali under WSL with the distro name `kali-linux`. SSH mode uses the Windows OpenSSH client. The tool buttons run commands in the selected session; tools must already be installed in that environment.
+To use Kali mode, set up Kali on WSL with the distro named `kali-linux`. SSH mode relies on Windows' OpenSSH client. The tool buttons execute commands in the session you’ve picked; just make sure the tools are already installed there.
 
 ## Notes
 
-- Double-click folders to change the local terminal directory; double-click files to open them with Windows.
-- Enter commands at the bottom of the terminal. Use Up/Down for history.
-- Select **Help** in the top bar for an in-app usage guide.
-- Commands execute one at a time, so full-screen interactive programs are not supported in this prototype.
-- Only run security tools against systems you own or have explicit permission to test.
+- Double-click on folders to switch the local terminal directory; double-click files to open them with Windows.
+- Type commands at the bottom of the terminal. Use the Up/Down arrows to browse command history.
+- Click **Help** in the top bar to access the in-app usage guide.
+- Commands run one after another, so full-screen interactive programs aren't supported in this prototype.
+- Only use security tools on systems you own or have explicit permission to test.
