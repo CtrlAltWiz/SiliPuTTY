@@ -1,4 +1,5 @@
 # What on Earth is SiliPuTTY?! <img width="32" height="32" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" />
+<img width="1245" height="762" alt="image" src="https://github.com/user-attachments/assets/65430860-1a99-4900-958c-3894c446929a" />
 
 <img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> This app is like PuTTY’s quirky cousin for Windows terminals, packing local PowerShell, Kali Linux through WSL, SSH command magic, one-click Kali gadget access, and a live file browser that’s always in sync.
 
