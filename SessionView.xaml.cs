@@ -27,6 +27,7 @@ public partial class SessionView : UserControl
     private string? _remoteListingToken;
     private bool _capturingRemoteListing;
     private bool _remoteBrowsingReady;
+    private bool _suppressEncodedCommandEcho;
     private string _remoteDirectory = "";
     private readonly List<string> _remoteListingLines = [];
     private int _sessionPort;
@@ -95,11 +96,11 @@ public partial class SessionView : UserControl
                 new("Routes", "Get-NetRoute | Sort-Object RouteMetric | Format-Table -AutoSize"),
                 new("Listening ports", "Get-NetTCPConnection -State Listen | Sort-Object LocalPort | Format-Table -AutoSize"),
                 new("DNS lookup", "Resolve-DnsName {target}", true, "domain"), new("Ping ×4", "Test-Connection {target} -Count 4", true, "host or IP"),
-                new("Trace route", "Test-NetConnection {target} -TraceRoute", true, "host or IP"),
+                new("Trace route", "tracert.exe -d {target}", true, "host or IP"),
                 new("Processes", "Get-Process | Sort-Object CPU -Descending | Select-Object -First 25"),
                 new("Services", "Get-Service | Sort-Object Status,DisplayName | Format-Table -AutoSize"),
-                new("Nmap quick", "nmap -T3 --top-ports 100 {target}", true, "authorized host"),
-                new("Nmap services", "nmap -sV -T3 {target}", true, "authorized host"),
+                new("Nmap quick", "if (Get-Command nmap -ErrorAction SilentlyContinue) { nmap -T3 --top-ports 100 {target} } else { Write-Warning 'Nmap is not installed on this remote Windows host.' }", true, "authorized host"),
+                new("Nmap services", "if (Get-Command nmap -ErrorAction SilentlyContinue) { nmap -sV -T3 {target} } else { Write-Warning 'Nmap is not installed on this remote Windows host.' }", true, "authorized host"),
                 new("Installed tools", "Get-Command nmap,nikto,gobuster,whois -ErrorAction SilentlyContinue | Select-Object Name,Source")
             ],
             PlatformKind.MacOS =>
@@ -603,6 +604,17 @@ public partial class SessionView : UserControl
     {
         text = StripTerminalControlSequences(text);
         if (text.Length == 0) return;
+        var trimmed = text.Trim();
+        if (trimmed.Contains("powershell.exe -NoLogo -NoProfile -EncodedCommand ", StringComparison.OrdinalIgnoreCase))
+        {
+            _suppressEncodedCommandEcho = true;
+            return;
+        }
+        if (_suppressEncodedCommandEcho)
+        {
+            if (trimmed.Length == 0 || Regex.IsMatch(trimmed, @"^[A-Za-z0-9+/=]+$")) return;
+            _suppressEncodedCommandEcho = false;
+        }
         if (TryHandleRemoteListingLine(text)) return;
         Append(text); Log(text);
         var lower = text.ToLowerInvariant();

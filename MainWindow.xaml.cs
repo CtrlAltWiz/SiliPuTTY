@@ -69,6 +69,11 @@ public partial class MainWindow : Window
 
     private void SessionTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        foreach (var item in SessionTabs.Items.OfType<TabItem>())
+        {
+            if (item.Header is StackPanel tabHeader && tabHeader.Children[0] is TextBox tabName)
+                tabName.Foreground = new SolidColorBrush(item.IsSelected ? Color.FromRgb(176, 56, 217) : Color.FromRgb(220, 231, 238));
+        }
         if (SessionTabs.SelectedItem is TabItem { Header: StackPanel header } && header.Children[0] is TextBox name)
             Title = $"SiliPuTTY — {name.Text}";
     }

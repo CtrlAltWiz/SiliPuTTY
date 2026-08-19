@@ -20,7 +20,7 @@
      <Setter Property="Foreground" Value="#DCE7EE"/><Setter Property="Background" Value="#182633"/>
      <Setter Property="BorderBrush" Value="#304A60"/><Setter Property="Padding" Value="4"/>
      <Setter Property="Margin" Value="2,3,0,0"/>
-     <Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#B038D9"/><Setter Property="Foreground" Value="#E8F1F8"/></Trigger></Style.Triggers>
+     <Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#211229"/><Setter Property="Foreground" Value="#B038D9"/><Setter Property="BorderBrush" Value="#B038D9"/></Trigger></Style.Triggers>
     </Style>
    </TabControl.Resources>
   </TabControl>
