@@ -6,6 +6,17 @@
 
 > **Project status:** `0.2.1-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
 
+## Version information
+
+| | |
+|---|---|
+| Current version | `0.2.1-alpha` |
+| Release channel | Alpha pre-release |
+| Platform | Windows x64; self-contained .NET 10 build |
+| Notable update | Remote folder browsing through an authenticated SSH session |
+
+This version can navigate remote Windows, Linux, and macOS folders from the file panel after SSH sign-in. Remote file opening, download, and upload remain planned for a future release.
+
 ## Highlights
 
 - Multiple independent PowerShell, Kali/WSL, and SSH session tabs
