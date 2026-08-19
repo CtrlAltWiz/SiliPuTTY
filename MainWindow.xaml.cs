@@ -30,7 +30,8 @@ public partial class MainWindow : Window
             Text = initialName, MinWidth = 74, MaxWidth = 180, Tag = "TabNameEditor",
             Visibility = Visibility.Collapsed, BorderThickness = new Thickness(1), Padding = new Thickness(3, 1, 3, 1)
         };
-        var edit = new Button { Style = (Style)FindResource("TabEditButtonStyle") };
+        var edit = new Button();
+        if (SessionTabs.TryFindResource("TabEditButtonStyle") is Style editStyle) edit.Style = editStyle;
         var close = new Button
         {
             Content = "×", ToolTip = "Close session", Padding = new Thickness(5, 0, 5, 1),
