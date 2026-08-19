@@ -2,6 +2,8 @@
 
 SiliPuTTY is currently alpha software. Do not use it as the sole access path to production systems until its terminal and authentication workflows have been validated in your environment.
 
+On first SSH connection, compare the displayed host-key fingerprint with a trusted value from the host or its administrator before approving it. Passwords and private-key passphrases are collected by a masked OpenSSH askpass window and are not placed on the command line, written to logs, or saved by SiliPuTTY.
+
 ## Reporting a vulnerability
 
 Do not open a public issue containing credentials, hostnames, packet captures, private keys, or exploit details. Use GitHub's private vulnerability reporting / Security Advisory feature for the repository owner.

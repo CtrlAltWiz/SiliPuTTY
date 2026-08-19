@@ -13,6 +13,25 @@ public partial class App : Application
         TaskScheduler.UnobservedTaskException += (_, e) => { WriteCrashLog(e.Exception); e.SetObserved(); };
     }
 
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+        if (Environment.GetEnvironmentVariable("SILIPUTTY_ASKPASS") == "1")
+        {
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            var prompt = e.Args.FirstOrDefault() ?? "Enter the SSH password or private-key passphrase.";
+            var window = new SecretPromptWindow(prompt, "SSH Authentication");
+            if (window.ShowDialog() == true)
+            {
+                Console.Out.WriteLine(window.Secret); Console.Out.Flush(); Shutdown(0);
+            }
+            else Shutdown(1);
+            return;
+        }
+
+        var mainWindow = new MainWindow(); MainWindow = mainWindow; mainWindow.Show();
+    }
+
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         var path = WriteCrashLog(e.Exception);

@@ -4,18 +4,18 @@
 
 <img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> The app spots whether you're on Windows, Linux, or macOS as soon as you connect and then whips up a session-tool palette packed with commands that actually make sense for your platform. If it stumbles upon an unfamiliar SSH platform, it just shrugs and defaults to a generic appliance profile for switches, routers, and firewalls. And if you’re feeling rebellious, the Platform menu lets you override its guesswork whenever you want.
 
-> **Project status:** `0.3.0-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
+> **Project status:** `0.3.1-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
 
 ## Version information
 
 | | |
 |---|---|
-| Current version | `0.3.0-alpha` |
+| Current version | `0.3.1-alpha` |
 | Release channel | Alpha pre-release |
 | Platform | Windows x64; self-contained .NET 10 build |
-| Notable update | New SiliPuTTY branding and remote folder browsing through authenticated SSH sessions |
+| Notable update | Reliable SSH host-key approval, masked authentication prompts, and connection-timeout recovery |
 
-This version can navigate remote Windows, Linux, and macOS folders from the file panel after SSH sign-in. Remote file opening, download, and upload remain planned for a future release.
+This version presents first-use SSH host fingerprints in a dedicated approval dialog and opens a masked authentication window for passwords or private-key passphrases. Connection output and shutdown are dispatched asynchronously to prevent timeout-related UI deadlocks.
 
 ## Highlights
 
@@ -54,13 +54,13 @@ SiliPuTTY does not silently download, install, or elevate external tools. Check 
 
 ### Download for Windows
 
-Download SiliPuTTY `v0.3.0-alpha` directly:
+Download SiliPuTTY `v0.3.1-alpha` directly:
 
-<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.0-alpha/SiliPuTTY-0.3.0-alpha-Setup.exe)** — recommended for most users; installs SiliPuTTY and creates Start Menu shortcuts.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.1-alpha/SiliPuTTY-0.3.1-alpha-Setup.exe)** — recommended for most users; installs SiliPuTTY and creates Start Menu shortcuts.
 
-<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.0-alpha/SiliPuTTY-0.3.0-alpha-win-x64.zip)** — extract the archive, then run `SiliPuTTY.exe`; no .NET installation is required.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.1-alpha/SiliPuTTY-0.3.1-alpha-win-x64.zip)** — extract the archive, then run `SiliPuTTY.exe`; no .NET installation is required.
 
-<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.0-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.1-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
 
 See the [GitHub Releases page](https://github.com/CtrlAltWiz/SiliPuTTY/releases) for release notes and future versions. Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
 
