@@ -56,7 +56,12 @@ public partial class SessionView : UserControl
         RefreshFiles();
         Append("SiliPuTTY ready. Select a session and connect, or run local PowerShell commands.\n");
         _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
-        _refreshTimer.Tick += async (_, _) => await RefreshActiveFilesAsync(false);
+        _refreshTimer.Tick += (_, _) =>
+        {
+            // Polling a remote interactive TTY echoes the encoded listing command into the
+            // terminal. Remote listings refresh explicitly on connect/navigation/↻ instead.
+            if (_mode != SessionMode.Ssh) RefreshFiles(false);
+        };
         _refreshTimer.Start();
         CommandBox.Focus();
     }
@@ -368,7 +373,11 @@ public partial class SessionView : UserControl
             await _sessionProcess!.StandardInput.WriteLineAsync(command); await _sessionProcess.StandardInput.FlushAsync();
         }
         catch (Exception ex) { Append($"[error] {ex.Message}\n"); }
-        finally { CommandBox.Focus(); await RefreshActiveFilesAsync(false); }
+        finally
+        {
+            CommandBox.Focus();
+            if (_mode != SessionMode.Ssh) await RefreshActiveFilesAsync(false);
+        }
     }
 
     private ProcessStartInfo BuildSessionProcess()
@@ -537,6 +546,48 @@ public partial class SessionView : UserControl
         else Process.Start(new ProcessStartInfo(item.FullPath) { UseShellExecute = true });
     }
     private async void Refresh_Click(object sender, RoutedEventArgs e) => await RefreshActiveFilesAsync();
+    private void OpenInExplorer_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            if (_mode != SessionMode.Ssh)
+            {
+                var localItem = FileList.SelectedItem as FileEntry;
+                var localPath = localItem?.FullPath ?? _currentDirectory;
+                OpenExplorerPath(localPath, localItem is { IsDirectory: false });
+                return;
+            }
+
+            if (ActivePlatform != PlatformKind.Windows)
+            {
+                MessageBox.Show("Windows File Explorer cannot browse this SSH host directly. Remote Explorer access is currently available for Windows hosts through Windows file sharing.", "Open in File Explorer", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var remoteItem = FileList.SelectedItem as FileEntry;
+            var remotePath = remoteItem == null ? _remoteDirectory
+                : remoteItem.Name == ".." ? Directory.GetParent(_remoteDirectory)?.FullName ?? _remoteDirectory
+                : Path.Combine(_remoteDirectory, remoteItem.Name);
+            var driveMatch = Regex.Match(remotePath, @"^(?<drive>[A-Za-z]):\\(?<rest>.*)$");
+            if (!driveMatch.Success) throw new InvalidOperationException("The selected remote path is not a Windows drive path.");
+
+            var destination = GetSshDestination(out _);
+            var host = destination.Contains('@') ? destination[(destination.LastIndexOf('@') + 1)..] : destination;
+            var uncPath = $@"\\{host}\{driveMatch.Groups["drive"].Value}$\{driveMatch.Groups["rest"].Value}".TrimEnd('\\');
+            OpenExplorerPath(uncPath, remoteItem is { IsDirectory: false });
+            Append($"[files] Opening {uncPath} in File Explorer. Windows may request file-sharing credentials.\n");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Could not open the selected path in File Explorer.\n\n{ex.Message}", "Open in File Explorer", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
+    private static void OpenExplorerPath(string path, bool selectFile)
+    {
+        var startInfo = new ProcessStartInfo("explorer.exe") { UseShellExecute = true };
+        startInfo.ArgumentList.Add(selectFile ? $"/select,{path}" : path);
+        Process.Start(startInfo);
+    }
     private void Clear_Click(object sender, RoutedEventArgs e) => TerminalOutput.Clear();
     private void Help_Click(object sender, RoutedEventArgs e) => new HelpWindow { Owner = Window.GetWindow(this) }.ShowDialog();
     private async void SendSecret_Click(object sender, RoutedEventArgs e)

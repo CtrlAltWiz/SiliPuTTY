@@ -56,6 +56,9 @@
       <DockPanel><TextBlock x:Name="FileHeading" Text="LOCAL FILES" FontWeight="SemiBold" VerticalAlignment="Center"/><Button Content="↻" DockPanel.Dock="Right" Padding="8,2" Click="Refresh_Click"/></DockPanel>
       <TextBlock x:Name="PathText" Grid.Row="1" TextTrimming="CharacterEllipsis" Foreground="{StaticResource Muted}" Margin="0,6"/>
       <ListView x:Name="FileList" Grid.Row="2" Background="#0B1117" Foreground="#569DE5" BorderThickness="0" MouseDoubleClick="FileList_DoubleClick">
+       <ListView.ContextMenu>
+        <ContextMenu><MenuItem Header="Open in File Explorer" Click="OpenInExplorer_Click"/></ContextMenu>
+       </ListView.ContextMenu>
        <ListView.Resources>
         <Style TargetType="GridViewColumnHeader">
          <Setter Property="Foreground" Value="#569DE5"/><Setter Property="Background" Value="#182633"/>
