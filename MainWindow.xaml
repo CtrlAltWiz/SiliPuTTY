@@ -16,6 +16,17 @@
   </Border>
   <TabControl x:Name="SessionTabs" Grid.Row="1" Background="#0B1117" BorderThickness="0" Padding="0" SelectionChanged="SessionTabs_SelectionChanged">
    <TabControl.Resources>
+    <Style x:Key="TabEditButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+     <Setter Property="Content" Value="✎"/><Setter Property="ToolTip" Value="Rename session"/>
+     <Setter Property="Padding" Value="4,0"/><Setter Property="Margin" Value="4,0,0,0"/>
+     <Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/>
+     <Setter Property="Opacity" Value="0"/><Setter Property="IsHitTestVisible" Value="False"/>
+     <Style.Triggers>
+      <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+       <Setter Property="Opacity" Value="1"/><Setter Property="IsHitTestVisible" Value="True"/>
+      </DataTrigger>
+     </Style.Triggers>
+    </Style>
     <Style TargetType="TabItem">
      <Setter Property="Foreground" Value="#DCE7EE"/><Setter Property="Background" Value="#182633"/>
      <Setter Property="BorderBrush" Value="#304A60"/><Setter Property="Padding" Value="4"/>
