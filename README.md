@@ -4,18 +4,18 @@
 
 <img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> The app spots whether you're on Windows, Linux, or macOS as soon as you connect and then whips up a session-tool palette packed with commands that actually make sense for your platform. If it stumbles upon an unfamiliar SSH platform, it just shrugs and defaults to a generic appliance profile for switches, routers, and firewalls. And if you’re feeling rebellious, the Platform menu lets you override its guesswork whenever you want.
 
-> **Project status:** `0.3.2-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
+> **Project status:** `0.3.3-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
 
 ## Version information
 
 | | |
 |---|---|
-| Current version | `0.3.2-alpha` |
+| Current version | `0.3.3-alpha` |
 | Release channel | Alpha pre-release |
 | Platform | Windows x64; self-contained .NET 10 build |
-| Notable update | Reliable Windows OpenSSH commands, automatic post-login platform detection, and remote file browsing |
+| Notable update | Quiet remote browsing and Windows File Explorer integration |
 
-This version removes invisible UTF-8 markers from terminal input, detects Windows after an authenticated SSH login, and runs Windows session tools through PowerShell even when OpenSSH starts in Command Prompt. It also restores Windows remote-folder navigation and removes common ANSI control sequences from displayed output.
+This version stops background SSH file polling from echoing encoded listing commands into the terminal. Remote listings now refresh on connect, navigation, or demand, and a new right-click action opens local paths or accessible Windows administrative-share paths in File Explorer.
 
 ## Highlights
 
@@ -54,13 +54,13 @@ SiliPuTTY does not silently download, install, or elevate external tools. Check 
 
 ### Download for Windows
 
-Download SiliPuTTY `v0.3.2-alpha` directly:
+Download SiliPuTTY `v0.3.3-alpha` directly:
 
-<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.2-alpha/SiliPuTTY-0.3.2-alpha-Setup.exe)** — recommended for most users; installs SiliPuTTY and creates Start Menu shortcuts.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.3-alpha/SiliPuTTY-0.3.3-alpha-Setup.exe)** — recommended for most users; installs SiliPuTTY and creates Start Menu shortcuts.
 
-<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.2-alpha/SiliPuTTY-0.3.2-alpha-win-x64.zip)** — extract the archive, then run `SiliPuTTY.exe`; no .NET installation is required.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.3-alpha/SiliPuTTY-0.3.3-alpha-win-x64.zip)** — extract the archive, then run `SiliPuTTY.exe`; no .NET installation is required.
 
-<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.2-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.3-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
 
 See the [GitHub Releases page](https://github.com/CtrlAltWiz/SiliPuTTY/releases) for release notes and future versions. Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
 
