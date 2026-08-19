@@ -3,7 +3,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
 public partial class App : Application
 {
     public App()
@@ -16,7 +16,7 @@ public partial class App : Application
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         var path = WriteCrashLog(e.Exception);
-        MessageBox.Show($"SillyPutty encountered an unexpected error.\n\nA diagnostic log was written to:\n{path}", "SillyPutty error", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show($"SiliPuTTY encountered an unexpected error.\n\nA diagnostic log was written to:\n{path}", "SiliPuTTY error", MessageBoxButton.OK, MessageBoxImage.Error);
         e.Handled = true; Shutdown(-1);
     }
 
@@ -24,9 +24,9 @@ public partial class App : Application
     {
         try
         {
-            var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SillyPutty", "CrashLogs"); Directory.CreateDirectory(folder);
+            var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SiliPuTTY", "CrashLogs"); Directory.CreateDirectory(folder);
             var path = Path.Combine(folder, $"crash-{DateTime.Now:yyyyMMdd-HHmmss-fff}.log");
-            var text = new StringBuilder().AppendLine($"SillyPutty crash at {DateTimeOffset.Now:O}").AppendLine($"Version: {typeof(App).Assembly.GetName().Version}").AppendLine($"OS: {Environment.OSVersion}").AppendLine().AppendLine(exception.ToString()).ToString();
+            var text = new StringBuilder().AppendLine($"SiliPuTTY crash at {DateTimeOffset.Now:O}").AppendLine($"Version: {typeof(App).Assembly.GetName().Version}").AppendLine($"OS: {Environment.OSVersion}").AppendLine().AppendLine(exception.ToString()).ToString();
             File.WriteAllText(path, text); return path;
         }
         catch { return "(crash log could not be written)"; }

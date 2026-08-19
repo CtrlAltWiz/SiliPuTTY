@@ -1,6 +1,6 @@
 # Security policy
 
-SillyPutty is currently alpha software. Do not use it as the sole access path to production systems until its terminal and authentication workflows have been validated in your environment.
+SiliPuTTY is currently alpha software. Do not use it as the sole access path to production systems until its terminal and authentication workflows have been validated in your environment.
 
 ## Reporting a vulnerability
 

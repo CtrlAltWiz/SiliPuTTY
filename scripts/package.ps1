@@ -4,12 +4,12 @@ param(
 )
 $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$publishPath = Join-Path $projectRoot "artifacts\SillyPutty-$Runtime"
-[xml]$project = Get-Content (Join-Path $projectRoot "SillyPutty.csproj")
+$publishPath = Join-Path $projectRoot "artifacts\SiliPuTTY-$Runtime"
+[xml]$project = Get-Content (Join-Path $projectRoot "SiliPuTTY.csproj")
 $version = $project.Project.PropertyGroup.Version
-$zipPath = Join-Path $projectRoot "artifacts\SillyPutty-$version-$Runtime.zip"
-dotnet publish (Join-Path $projectRoot "SillyPutty.csproj") -c Release -r $Runtime --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o $publishPath
-$exePath = Join-Path $publishPath "SillyPutty.exe"
+$zipPath = Join-Path $projectRoot "artifacts\SiliPuTTY-$version-$Runtime.zip"
+dotnet publish (Join-Path $projectRoot "SiliPuTTY.csproj") -c Release -r $Runtime --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o $publishPath
+$exePath = Join-Path $publishPath "SiliPuTTY.exe"
 if ($CertificateThumbprint) {
     $signTool = Get-Command signtool.exe -ErrorAction Stop
     & $signTool.Source sign /sha1 $CertificateThumbprint /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 $exePath

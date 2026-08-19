@@ -1,4 +1,4 @@
-# SillyPutty capability status
+# SiliPuTTY capability status
 
 This file distinguishes implemented behavior from configuration UI and planned work. A setting is not considered supported until its transport or terminal engine applies it.
 

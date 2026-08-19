@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
 
 public partial class MainWindow : Window
 {
@@ -35,7 +35,7 @@ public partial class MainWindow : Window
         var tab = new TabItem { Header = header, Content = session };
         close.Click += (_, _) => CloseSession(tab);
         session.TitleSuggested += title => name.Text = title;
-        name.TextChanged += (_, _) => { if (SessionTabs.SelectedItem == tab) Title = $"SillyPutty — {name.Text}"; };
+        name.TextChanged += (_, _) => { if (SessionTabs.SelectedItem == tab) Title = $"SiliPuTTY — {name.Text}"; };
         SessionTabs.Items.Add(tab);
         SessionTabs.SelectedItem = tab;
         name.SelectAll();
@@ -70,6 +70,6 @@ public partial class MainWindow : Window
     private void SessionTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (SessionTabs.SelectedItem is TabItem { Header: StackPanel header } && header.Children[0] is TextBox name)
-            Title = $"SillyPutty — {name.Text}";
+            Title = $"SiliPuTTY — {name.Text}";
     }
 }

@@ -1,19 +1,19 @@
-# What on Earth is SillyPuTTY?! <img width="32" height="32" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" />
+# What on Earth is SiliPuTTY?! <img width="32" height="32" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" />
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> This app is like PuTTY’s quirky cousin for Windows terminals, packing local PowerShell, Kali Linux through WSL, SSH command magic, one-click Kali gadget access, and a live file browser that’s always in sync.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> This app is like PuTTY’s quirky cousin for Windows terminals, packing local PowerShell, Kali Linux through WSL, SSH command magic, one-click Kali gadget access, and a live file browser that’s always in sync.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> The app spots whether you're on Windows, Linux, or macOS as soon as you connect and then whips up a session-tool palette packed with commands that actually make sense for your platform. If it stumbles upon an unfamiliar SSH platform, it just shrugs and defaults to a generic appliance profile for switches, routers, and firewalls. And if you’re feeling rebellious, the Platform menu lets you override its guesswork whenever you want.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> The app spots whether you're on Windows, Linux, or macOS as soon as you connect and then whips up a session-tool palette packed with commands that actually make sense for your platform. If it stumbles upon an unfamiliar SSH platform, it just shrugs and defaults to a generic appliance profile for switches, routers, and firewalls. And if you’re feeling rebellious, the Platform menu lets you override its guesswork whenever you want.
 
-> **Project status:** `0.2.1-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
+> **Project status:** `0.3.0-alpha` — ready for controlled testing, but not yet recommended as the sole access path to production systems. See [capability status](FEATURES.md) and the [release checklist](RELEASE_CHECKLIST.md).
 
 ## Version information
 
 | | |
 |---|---|
-| Current version | `0.2.1-alpha` |
+| Current version | `0.3.0-alpha` |
 | Release channel | Alpha pre-release |
 | Platform | Windows x64; self-contained .NET 10 build |
-| Notable update | Remote folder browsing through an authenticated SSH session |
+| Notable update | New SiliPuTTY branding and remote folder browsing through authenticated SSH sessions |
 
 This version can navigate remote Windows, Linux, and macOS folders from the file panel after SSH sign-in. Remote file opening, download, and upload remain planned for a future release.
 
@@ -35,7 +35,7 @@ This version can navigate remote Windows, Linux, and macOS folders from the file
 
 ## Requirements
 
-SillyPutty runs on Windows. The self-contained package includes the required .NET runtime.
+SiliPuTTY runs on Windows. The self-contained package includes the required .NET runtime.
 
 Runtime integrations are detected automatically:
 
@@ -48,21 +48,21 @@ Runtime integrations are detected automatically:
 | Wireshark and TShark | Packet capture and PCAP analysis | Optional |
 | Npcap | Live packet-capture driver | Optional |
 
-SillyPutty does not silently download, install, or elevate external tools. Check **Network → Capabilities** after installing them.
+SiliPuTTY does not silently download, install, or elevate external tools. Check **Network → Capabilities** after installing them.
 
 ## Getting started
 
 ### Download for Windows
 
-Download SillyPutty `v0.2.1-alpha` directly:
+Download SiliPuTTY `v0.3.0-alpha` directly:
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.1-alpha/SillyPutty-0.2.1-alpha-Setup.exe)** — recommended for most users; installs SillyPutty and creates Start Menu shortcuts.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Windows installer](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.0-alpha/SiliPuTTY-0.3.0-alpha-Setup.exe)** — recommended for most users; installs SiliPuTTY and creates Start Menu shortcuts.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.1-alpha/SillyPutty-0.2.1-alpha-win-x64.zip)** — extract the archive, then run `SillyPutty.exe`; no .NET installation is required.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[Portable ZIP](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.0-alpha/SiliPuTTY-0.3.0-alpha-win-x64.zip)** — extract the archive, then run `SiliPuTTY.exe`; no .NET installation is required.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SillyPutty/releases/download/v0.2.1-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> **[SHA-256 checksums](https://github.com/CtrlAltWiz/SiliPuTTY/releases/download/v0.3.0-alpha/SHA256SUMS.txt)** — use these to verify downloaded files.
 
-See the [GitHub Releases page](https://github.com/CtrlAltWiz/SillyPutty/releases) for release notes and future versions. Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
+See the [GitHub Releases page](https://github.com/CtrlAltWiz/SiliPuTTY/releases) for release notes and future versions. Do not use GitHub's **Source code** downloads unless you intend to build the application yourself.
 
 Early alpha, beta, and release-candidate builds appear under **Pre-releases**. Windows may show an unknown-publisher warning until release binaries are code-signed.
 
@@ -71,16 +71,16 @@ Early alpha, beta, and release-candidate builds appear under **Pre-releases**. W
 Install the .NET 10 SDK, clone the repository, and run:
 
 ```powershell
-dotnet run --project .\SillyPutty.csproj
+dotnet run --project .\SiliPuTTY.csproj
 ```
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> To use Kali mode, set up Kali on WSL with the distro named `kali-linux`. SSH mode relies on Windows' OpenSSH client. The tool buttons execute commands in the session you’ve picked; just make sure the tools are already installed there.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> To use Kali mode, set up Kali on WSL with the distro named `kali-linux`. SSH mode relies on Windows' OpenSSH client. The tool buttons execute commands in the session you’ve picked; just make sure the tools are already installed there.
 
 ### Build
 
 ```powershell
-dotnet build .\SillyPutty.csproj -c Release
-dotnet run --project .\tests\SillyPutty.Tests\SillyPutty.Tests.csproj -c Release
+dotnet build .\SiliPuTTY.csproj -c Release
+dotnet run --project .\tests\SiliPuTTY.Tests\SiliPuTTY.Tests.csproj -c Release
 ```
 
 ### Create a self-contained package
@@ -106,17 +106,17 @@ The packaging script supports an optional trusted code-signing certificate thumb
 
 Keyboard shortcuts:
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+T` — new session tab
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+T` — new session tab
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+W` — close active tab
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+W` — close active tab
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+Tab` / `Ctrl+Shift+Tab` — switch tabs
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Ctrl+Tab` / `Ctrl+Shift+Tab` — switch tabs
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Up` / `Down` — command history
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> `Up` / `Down` — command history
 
 ## Plugins
 
-Plugin mode integrates command-line tools already installed on a user's system. Plugins are JSON manifests, require explicit enablement, and cannot inject DLL or WPF code into SillyPutty. See the [plugin authoring guide](docs/PLUGINS.md).
+Plugin mode integrates command-line tools already installed on a user's system. Plugins are JSON manifests, require explicit enablement, and cannot inject DLL or WPF code into SiliPuTTY. See the [plugin authoring guide](docs/PLUGINS.md).
 
 Plugin capability declarations are disclosures, not an operating-system sandbox. Only enable plugins from publishers you trust.
 
@@ -134,20 +134,20 @@ The full implemented/partial/planned matrix is maintained in [FEATURES.md](FEATU
 
 ## License
 
-SillyPutty is free and open-source software licensed under the [MIT License](LICENSE).
+SiliPuTTY is free and open-source software licensed under the [MIT License](LICENSE).
 
 Copyright © 2026 CtrlAltWiz.
 
-External applications—including PuTTY, Nmap, Wireshark, TShark, and Npcap—are separate projects governed by their own licenses and are not relicensed or automatically distributed by SillyPutty.
+External applications—including PuTTY, Nmap, Wireshark, TShark, and Npcap—are separate projects governed by their own licenses and are not relicensed or automatically distributed by SiliPuTTY.
 
 ## Quick tips
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Double-click folders to switch directories. SSH sessions can browse remote folders after sign-in; remote file opening and downloads remain planned.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Double-click folders to switch directories. SSH sessions can browse remote folders after sign-in; remote file opening and downloads remain planned.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Type commands at the bottom of the terminal. Use the Up/Down arrows to browse command history.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Type commands at the bottom of the terminal. Use the Up/Down arrows to browse command history.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Click **Help** in the top bar to access the in-app usage guide.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Click **Help** in the top bar to access the in-app usage guide.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Commands run one after another, so full-screen interactive programs aren't supported in this prototype.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Commands run one after another, so full-screen interactive programs aren't supported in this prototype.
 
-<img width="18" height="18" alt="sillyputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Only use security tools on systems you own or have explicit permission to test.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Only use security tools on systems you own or have explicit permission to test.

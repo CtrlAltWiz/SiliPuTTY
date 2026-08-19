@@ -1,8 +1,8 @@
-# SillyPutty plugins
+# SiliPuTTY plugins
 
 Plugin mode integrates command-line tools already installed on a user's system. Plugins are data-only JSON manifests: they cannot load DLLs, inject UI code, install software, request elevation, or store passwords.
 
-Place manifests in `%LOCALAPPDATA%\SillyPutty\Plugins`, then enable them under **Configure → Plugins**. New session tabs load enabled tools after settings are saved.
+Place manifests in `%LOCALAPPDATA%\SiliPuTTY\Plugins`, then enable them under **Configure → Plugins**. New session tabs load enabled tools after settings are saved.
 
 ```json
 {

@@ -1,7 +1,34 @@
 using System.IO;
 using System.Text.Json;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
+
+internal static class AppDataPaths
+{
+    public static readonly string Root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SiliPuTTY");
+    private static readonly string LegacyRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SillyPutty");
+
+    public static string FileWithLegacyFallback(string name)
+    {
+        var current = Path.Combine(Root, name); var legacy = Path.Combine(LegacyRoot, name);
+        if (!File.Exists(current) && File.Exists(legacy))
+        {
+            Directory.CreateDirectory(Root); File.Copy(legacy, current);
+        }
+        return current;
+    }
+
+    public static string DirectoryWithLegacyMigration(string name)
+    {
+        var current = Path.Combine(Root, name); var legacy = Path.Combine(LegacyRoot, name);
+        if (!Directory.Exists(current) && Directory.Exists(legacy))
+        {
+            Directory.CreateDirectory(current);
+            foreach (var file in Directory.EnumerateFiles(legacy)) File.Copy(file, Path.Combine(current, Path.GetFileName(file)), false);
+        }
+        return current;
+    }
+}
 
 public sealed class AppSettings
 {
@@ -10,7 +37,7 @@ public sealed class AppSettings
     public string ConnectionType { get; set; } = "SSH";
     public string CloseOnExit { get; set; } = "Only on clean exit";
     public string LoggingMode { get; set; } = "None";
-    public string LogFilePattern { get; set; } = "SillyPutty-&Y&M&D-&T.log";
+    public string LogFilePattern { get; set; } = "SiliPuTTY-&Y&M&D-&T.log";
     public string ExistingLogAction { get; set; } = "Ask";
     public bool FlushLogs { get; set; } = true;
     public bool IncludeLogHeader { get; set; } = true;
@@ -49,8 +76,8 @@ public sealed class AppSettings
 public static class SettingsStore
 {
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
-    private static readonly string Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SillyPutty");
-    private static readonly string FilePath = Path.Combine(Folder, "settings.json");
+    private static readonly string Folder = AppDataPaths.Root;
+    private static readonly string FilePath = AppDataPaths.FileWithLegacyFallback("settings.json");
     public static AppSettings Current { get; private set; } = Load();
 
     private static AppSettings Load()
@@ -82,8 +109,8 @@ public sealed class SessionProfile
 public static class ProfileStore
 {
     private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
-    private static readonly string Folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SillyPutty");
-    private static readonly string FilePath = Path.Combine(Folder, "profiles.json");
+    private static readonly string Folder = AppDataPaths.Root;
+    private static readonly string FilePath = AppDataPaths.FileWithLegacyFallback("profiles.json");
     public static IReadOnlyList<SessionProfile> Load()
     {
         try { return File.Exists(FilePath) ? JsonSerializer.Deserialize<List<SessionProfile>>(File.ReadAllText(FilePath)) ?? [] : []; }
