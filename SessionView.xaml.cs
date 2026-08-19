@@ -37,7 +37,7 @@ public partial class SessionView : UserControl
     private sealed record Tool(string Label, string Command, bool NeedsTarget = false, string Hint = "");
     private sealed record FileEntry(string Name, string FullPath, string Kind, bool IsDirectory);
     private enum SessionMode { PowerShell, Kali, Ssh }
-    private enum PlatformKind { Default, Windows, Linux, MacOS }
+    private enum PlatformKind { Default, Windows, Linux, MacOS, Cisco, Aruba, Fortinet, PaloAlto, Juniper }
 
     public event Action<string>? TitleSuggested;
 
@@ -69,14 +69,16 @@ public partial class SessionView : UserControl
 
     private PlatformKind ActivePlatform => PlatformSelector.SelectedIndex switch
     {
-        1 => PlatformKind.Default, 2 => PlatformKind.Windows, 3 => PlatformKind.Linux, 4 => PlatformKind.MacOS, _ => _detectedPlatform
+        1 => PlatformKind.Default, 2 => PlatformKind.Windows, 3 => PlatformKind.Linux, 4 => PlatformKind.MacOS,
+        5 => PlatformKind.Cisco, 6 => PlatformKind.Aruba, 7 => PlatformKind.Fortinet, 8 => PlatformKind.PaloAlto,
+        9 => PlatformKind.Juniper, _ => _detectedPlatform
     };
 
     private void RebuildTools()
     {
         if (ToolsPanel == null) return;
         ToolsPanel.Children.Clear();
-        DetectedPlatformText.Text = ActivePlatform switch { PlatformKind.MacOS => "macOS", _ => ActivePlatform.ToString() };
+        DetectedPlatformText.Text = ActivePlatform switch { PlatformKind.MacOS => "macOS", PlatformKind.PaloAlto => "Palo Alto", _ => ActivePlatform.ToString() };
         Tool[] tools = ActivePlatform switch
         {
             PlatformKind.Default =>
@@ -88,6 +90,44 @@ public partial class SessionView : UserControl
                 new("Running config", "show running-config"), new("Disable paging", "terminal length 0"),
                 new("Ping", "ping {target}", true, "host or IP"),
                 new("Trace route", "traceroute {target}", true, "host or IP")
+            ],
+            PlatformKind.Cisco =>
+            [
+                new("Version", "show version"), new("Inventory", "show inventory"), new("Interfaces", "show interfaces status"),
+                new("IP summary", "show ip interface brief"), new("Routes", "show ip route"), new("ARP table", "show arp"),
+                new("CDP neighbors", "show cdp neighbors detail"), new("LLDP neighbors", "show lldp neighbors detail"),
+                new("Running config", "show running-config"), new("Disable paging", "terminal length 0"),
+                new("Ping", "ping {target}", true, "host or IP"), new("Trace route", "traceroute {target}", true, "host or IP")
+            ],
+            PlatformKind.Aruba =>
+            [
+                new("Version", "show version"), new("System", "show system"), new("Interfaces", "show interfaces brief"),
+                new("IP summary", "show ip"), new("Routes", "show ip route"), new("ARP table", "show arp"),
+                new("LLDP neighbors", "show lldp info remote-device"), new("Running config", "show running-config"),
+                new("Disable paging", "no page"), new("Ping", "ping {target}", true, "host or IP"),
+                new("Trace route", "traceroute {target}", true, "host or IP")
+            ],
+            PlatformKind.Fortinet =>
+            [
+                new("System status", "get system status"), new("Interfaces", "get system interface physical"),
+                new("IP addresses", "diagnose ip address list"), new("Routes", "get router info routing-table all"),
+                new("ARP table", "get system arp"), new("Processes", "diagnose sys top 1 20"),
+                new("Interface config", "show system interface"), new("Full config", "show full-configuration"),
+                new("Ping", "execute ping {target}", true, "host or IP"), new("Trace route", "execute traceroute {target}", true, "host or IP")
+            ],
+            PlatformKind.PaloAlto =>
+            [
+                new("System info", "show system info"), new("Interfaces", "show interface all"), new("Routes", "show routing route"),
+                new("ARP table", "show arp all"), new("Sessions", "show session info"), new("Jobs", "show jobs all"),
+                new("Running config", "show config running"), new("Disable paging", "set cli pager off"),
+                new("Ping", "ping host {target}", true, "host or IP"), new("Trace route", "traceroute host {target}", true, "host or IP")
+            ],
+            PlatformKind.Juniper =>
+            [
+                new("Version", "show version"), new("Hardware", "show chassis hardware"), new("Interfaces", "show interfaces terse"),
+                new("Routes", "show route"), new("ARP table", "show arp"), new("LLDP neighbors", "show lldp neighbors"),
+                new("Configuration", "show configuration | display set"), new("Disable paging", "set cli screen-length 0"),
+                new("Ping ×4", "ping count 4 {target}", true, "host or IP"), new("Trace route", "traceroute {target}", true, "host or IP")
             ],
             PlatformKind.Windows =>
             [
@@ -447,7 +487,7 @@ public partial class SessionView : UserControl
     private async Task RequestRemoteFilesAsync(bool reportErrors)
     {
         if (_remoteListingToken != null || _sessionProcess is not { HasExited: false }) return;
-        if (ActivePlatform == PlatformKind.Default)
+        if (IsAppliancePlatform(ActivePlatform))
         {
             PathText.Text = "Remote browsing is unavailable for generic appliances";
             if (reportErrors) Append("[files] Remote browsing requires a Windows, Linux, or macOS SSH host.\n");
@@ -706,6 +746,7 @@ public partial class SessionView : UserControl
         text = Regex.Replace(text, "\\x1B\\[[0-?]*[ -/]*[@-~]", "");
         return text.Replace("\a", "");
     }
+    private static bool IsAppliancePlatform(PlatformKind platform) => platform is PlatformKind.Default or PlatformKind.Cisco or PlatformKind.Aruba or PlatformKind.Fortinet or PlatformKind.PaloAlto or PlatformKind.Juniper;
     private static Brush ParseBrush(string value, Color fallback)
     { try { return (Brush)new BrushConverter().ConvertFromString(value)!; } catch { return new SolidColorBrush(fallback); } }
     private void Append(string text) { TerminalOutput.AppendText(text); TerminalOutput.ScrollToEnd(); }

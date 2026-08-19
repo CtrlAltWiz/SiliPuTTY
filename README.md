@@ -23,7 +23,7 @@ This version stops background SSH file polling from echoing encoded listing comm
 - Persistent processes with reconnect, interrupt, and disconnect controls
 - Masked secret entry that avoids terminal history and session logs
 - SSH host-key warnings and configurable identity files
-- Windows, Linux, macOS, and generic network-appliance tool palettes
+- Windows, Linux, macOS, Cisco, Aruba, Fortinet, Palo Alto, Juniper, and generic appliance tool palettes
 - Named session profiles that never store passwords
 - Live local file browser plus remote folder navigation over an authenticated SSH session
 - PuTTY-style categorized configuration with persistent defaults
@@ -128,7 +128,7 @@ Passwords are not stored in profiles. Private-key configuration stores a filesys
 
 ## Current limitations
 
-The SSH process requests a remote TTY, but the local display is not yet a complete ConPTY/VT renderer. ANSI control sequences and full-screen interactive programs may not render correctly. Raw, Telnet, Rlogin, Serial, proxy routing, port forwarding, and integrated PSCP/PSFTP surfaces remain planned.
+The SSH process requests a remote TTY, but the local display is not yet a complete ConPTY/VT renderer. ANSI control sequences and full-screen interactive programs may not render correctly. Appliance profiles provide practical command presets, but syntax can vary by product family and firmware. Raw, Telnet, Rlogin, Serial, proxy routing, port forwarding, and integrated PSCP/PSFTP surfaces remain planned.
 
 The full implemented/partial/planned matrix is maintained in [FEATURES.md](FEATURES.md).
 
@@ -142,7 +142,7 @@ External applications—including PuTTY, Nmap, Wireshark, TShark, and Npcap—ar
 
 ## Quick tips
 
-<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Double-click folders to switch directories. SSH sessions can browse remote folders after sign-in; remote file opening and downloads remain planned.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Double-click folders to switch directories. Right-click local items to open them in File Explorer. Windows SSH paths can open through an accessible administrative share; other remote paths remain SSH-only.
 
 <img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> Type commands at the bottom of the terminal. Use the Up/Down arrows to browse command history.
 

@@ -7,7 +7,7 @@ This file distinguishes implemented behavior from configuration UI and planned w
 - Independent tabbed persistent local PowerShell, Kali/WSL, and SSH process sessions
 - Reconnect, interrupt, disconnect, masked secret entry, SSH host-key warnings, and output logging
 - Named session profiles that never store passwords
-- Windows, Linux, macOS, and generic network-appliance command palettes
+- Windows, Linux, macOS, Cisco, Aruba, Fortinet, Palo Alto, Juniper, and generic appliance command palettes
 - Persistent categorized defaults for session, logging, terminal, keyboard, bell, window, connection, proxy, SSH, and serial settings
 - Saved host, SSH port, username, identity file, compression, agent forwarding, X11 forwarding, wrapping, and terminal colors applied to new tabs
 - Private RFC 1918 `/24` discovery with bounded concurrency

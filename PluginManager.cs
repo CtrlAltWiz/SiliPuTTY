@@ -61,7 +61,7 @@ public static class PluginManager
         {
             if (string.IsNullOrWhiteSpace(tool.Label) || tool.Label.Length > 40) return "every tool requires a label of at most 40 characters.";
             if (tool.Commands.Count == 0 || tool.Commands.Any(c => c.Value.Length is < 1 or > 2000)) return $"{tool.Label} has an invalid command.";
-            if (tool.Commands.Keys.Any(k => k is not ("Default" or "Windows" or "Linux" or "MacOS"))) return $"{tool.Label} contains an unsupported platform key.";
+            if (tool.Commands.Keys.Any(k => k is not ("Default" or "Windows" or "Linux" or "MacOS" or "Cisco" or "Aruba" or "Fortinet" or "PaloAlto" or "Juniper"))) return $"{tool.Label} contains an unsupported platform key.";
         }
         return null;
     }

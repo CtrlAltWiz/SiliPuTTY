@@ -3,14 +3,14 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  Title="SiliPuTTY" Icon="Assets/siliputty.ico" Width="1260" Height="800" MinWidth="950" MinHeight="620"
  Background="#0B1117" Foreground="#E8F1F8" FontFamily="Segoe UI"
- PreviewKeyDown="Window_PreviewKeyDown">
+ PreviewKeyDown="Window_PreviewKeyDown" KeyboardNavigation.TabNavigation="Cycle">
  <Grid>
   <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
   <Border Grid.Row="0" Background="#121B24" BorderBrush="#263847" BorderThickness="0,0,0,1" Padding="8,6">
    <DockPanel>
-    <Button Content="＋ New Session" Click="NewTab_Click" DockPanel.Dock="Left" Background="#176B50" Padding="14,6"/>
-    <Button Content="⚙ Configure" Click="Configure_Click" DockPanel.Dock="Left" Padding="14,6"/>
-    <Button Content="◉ Network" Click="Network_Click" DockPanel.Dock="Left" Padding="14,6"/>
+    <Button Content="＋ New Session" Click="NewTab_Click" DockPanel.Dock="Left" Background="#176B50" Padding="14,6" AutomationProperties.Name="New session"/>
+    <Button Content="⚙ Configure" Click="Configure_Click" DockPanel.Dock="Left" Padding="14,6" AutomationProperties.Name="Open configuration"/>
+    <Button Content="◉ Network" Click="Network_Click" DockPanel.Dock="Left" Padding="14,6" AutomationProperties.Name="Open Network Center"/>
     <TextBlock Text="Ctrl+T new tab  •  Ctrl+W close tab  •  Edit a tab name directly" Foreground="#8495A7" VerticalAlignment="Center" Margin="12,0,0,0"/>
    </DockPanel>
   </Border>

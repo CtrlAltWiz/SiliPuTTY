@@ -10,8 +10,9 @@
 - [x] Plugin manifests require validation and explicit enablement
 - [ ] Complete ConPTY/VT renderer validation for interactive full-screen programs
 - [ ] Install Wireshark/TShark/Npcap and validate capture start/stop with representative PCAPNG files
-- [ ] Install Inno Setup and compile/test the installer on a clean Windows VM
+- [ ] Confirm the automated installer install/launch/uninstall smoke test passes on a tagged clean Windows runner
 - [ ] Obtain a trusted code-signing certificate and sign/timestamp the executable and installer
-- [ ] Choose and add an open-source license before making the repository public
+- [x] MIT license is included and the repository is public
 - [ ] Complete accessibility, DPI, keyboard-only, and screen-reader testing
 - [ ] Run a limited private beta and triage crash logs before public release
+- [ ] Field-test Cisco, Aruba, Fortinet, Palo Alto, Juniper, and generic appliance profiles on authorized hardware
