@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
 
 public partial class SecretPromptWindow : Window
 {

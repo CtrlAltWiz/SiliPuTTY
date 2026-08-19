@@ -8,7 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
 
 public partial class SessionView : UserControl
 {
@@ -52,7 +52,7 @@ public partial class SessionView : UserControl
         RebuildTools();
         _initializing = false;
         RefreshFiles();
-        Append("SillyPutty ready. Select a session and connect, or run local PowerShell commands.\n");
+        Append("SiliPuTTY ready. Select a session and connect, or run local PowerShell commands.\n");
         _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
         _refreshTimer.Tick += async (_, _) => await RefreshActiveFilesAsync(false);
         _refreshTimer.Start();
@@ -497,13 +497,13 @@ public partial class SessionView : UserControl
         {
             var name = settings.LogFilePattern.Replace("&Y", DateTime.Now.ToString("yyyy")).Replace("&M", DateTime.Now.ToString("MM")).Replace("&D", DateTime.Now.ToString("dd")).Replace("&T", DateTime.Now.ToString("HHmmss"));
             foreach (var invalid in Path.GetInvalidFileNameChars()) name = name.Replace(invalid, '_');
-            var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SillyPutty Logs"); Directory.CreateDirectory(folder);
+            var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SiliPuTTY Logs"); Directory.CreateDirectory(folder);
             var path = Path.IsPathRooted(name) ? name : Path.Combine(folder, name);
             var append = settings.ExistingLogAction == "Append";
             if (File.Exists(path) && settings.ExistingLogAction == "Ask")
                 append = MessageBox.Show($"Append to existing log?\n{path}\n\nChoose No to overwrite it.", "Existing session log", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
             _logWriter = new StreamWriter(path, append, Encoding.UTF8) { AutoFlush = settings.FlushLogs };
-            if (settings.IncludeLogHeader) _logWriter.WriteLine($"--- SillyPutty {DateTimeOffset.Now:O} | {_mode} | {HostBox.Text.Trim()} ---");
+            if (settings.IncludeLogHeader) _logWriter.WriteLine($"--- SiliPuTTY {DateTimeOffset.Now:O} | {_mode} | {HostBox.Text.Trim()} ---");
             if (settings.LoggingMode is "SSH packets" or "Raw data") Append("[logging] Packet/raw logging is not available through the current backend; recording session output instead.\n");
         }
         catch (Exception ex) { Append($"[logging error] {ex.Message}\n"); }

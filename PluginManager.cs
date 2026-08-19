@@ -2,7 +2,7 @@ using System.IO;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
 
 public sealed class PluginManifest
 {
@@ -31,7 +31,7 @@ public static class PluginManager
 {
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true, WriteIndented = true };
     private static readonly HashSet<string> AllowedCapabilities = new(StringComparer.OrdinalIgnoreCase) { "session-command", "network-access", "file-read", "file-write" };
-    public static string PluginFolder => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SillyPutty", "Plugins");
+    public static string PluginFolder => AppDataPaths.DirectoryWithLegacyMigration("Plugins");
 
     public static IReadOnlyList<PluginLoadResult> LoadAll()
     {
@@ -54,7 +54,7 @@ public static class PluginManager
         if (string.IsNullOrWhiteSpace(manifest.Name) || manifest.Name.Length > 80) return "name is required and must be at most 80 characters.";
         if (!Version.TryParse(manifest.Version, out _)) return "version must be numeric, such as 1.0.0.";
         if (!Version.TryParse(manifest.MinimumAppVersion, out var minimum)) return "minimumAppVersion must be numeric, such as 0.2.0.";
-        var current = typeof(PluginManager).Assembly.GetName().Version ?? new Version(0, 0); if (minimum > current) return $"requires SillyPutty {minimum} or later.";
+        var current = typeof(PluginManager).Assembly.GetName().Version ?? new Version(0, 0); if (minimum > current) return $"requires SiliPuTTY {minimum} or later.";
         if (manifest.Capabilities.Any(c => !AllowedCapabilities.Contains(c))) return "manifest requests an unknown capability.";
         if (manifest.Tools.Count is < 1 or > 40) return "manifest must define 1–40 tools.";
         foreach (var tool in manifest.Tools)

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
 
 public partial class ConfigurationWindow : Window
 {
@@ -79,7 +79,7 @@ public partial class ConfigurationWindow : Window
     }
     private void ShowPlugins()
     {
-        Info("Plugins are JSON manifests that expose commands from tools already installed on your system. They run out of process and must be explicitly enabled. SillyPutty never downloads, installs, or elevates a plugin.");
+        Info("Plugins are JSON manifests that expose commands from tools already installed on your system. They run out of process and must be explicitly enabled. SiliPuTTY never downloads, installs, or elevates a plugin.");
         var results = PluginManager.LoadAll(); var enabled = _settings.EnabledPluginIds.ToHashSet(StringComparer.OrdinalIgnoreCase);
         foreach (var result in results)
         {

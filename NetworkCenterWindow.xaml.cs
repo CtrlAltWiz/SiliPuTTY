@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
 
 public partial class NetworkCenterWindow : Window
 {
@@ -110,7 +110,7 @@ public partial class NetworkCenterWindow : Window
     private void Export_Click(object sender, RoutedEventArgs e)
     {
         if (Devices.Count == 0) { MessageBox.Show("Run a scan before exporting."); return; }
-        var dialog = new SaveFileDialog { Filter = "CSV files (*.csv)|*.csv", FileName = $"SillyPutty-scan-{DateTime.Now:yyyyMMdd-HHmm}.csv" };
+        var dialog = new SaveFileDialog { Filter = "CSV files (*.csv)|*.csv", FileName = $"SiliPuTTY-scan-{DateTime.Now:yyyyMMdd-HHmm}.csv" };
         if (dialog.ShowDialog(this) != true) return;
         static string Q(string s) => $"\"{s.Replace("\"", "\"\"")}\"";
         var lines = new[] { "IP Address,Hostname,MAC Address,Open Services,Latency" }.Concat(Devices.Select(d => string.Join(',', Q(d.Address), Q(d.Hostname), Q(d.Mac), Q(d.Services), Q(d.Latency))));
@@ -133,7 +133,7 @@ public partial class NetworkCenterWindow : Window
         if (_wiresharkPath == null || _tsharkPath == null) missing.Add("Wireshark with TShark for capture analysis");
         if (!npcap) missing.Add("Npcap for live packet capture");
         RecommendationPanel.Visibility = missing.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
-        RecommendationText.Text = missing.Count == 0 ? "" : $"Recommended: install {string.Join(", ", missing)}. SillyPutty does not install or elevate external tools automatically. After installation, select Refresh detection.";
+        RecommendationText.Text = missing.Count == 0 ? "" : $"Recommended: install {string.Join(", ", missing)}. SiliPuTTY does not install or elevate external tools automatically. After installation, select Refresh detection.";
         LoadInterfaces();
     }
 
@@ -163,7 +163,7 @@ public partial class NetworkCenterWindow : Window
     {
         if (_tsharkPath == null || InterfaceBox.SelectedItem == null) return;
         var match = Regex.Match(InterfaceBox.SelectedItem.ToString()!, @"^(\d+)\."); if (!match.Success) return;
-        var captures = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SillyPutty Captures"); Directory.CreateDirectory(captures);
+        var captures = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SiliPuTTY Captures"); Directory.CreateDirectory(captures);
         var outputFile = Path.Combine(captures, $"capture-{DateTime.Now:yyyyMMdd-HHmmss}.pcapng");
         if (!int.TryParse(CaptureDurationBox.Text, out var duration)) duration = 300; duration = Math.Clamp(duration, 10, 86400); CaptureDurationBox.Text = duration.ToString();
         var psi = new ProcessStartInfo(_tsharkPath) { UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true };

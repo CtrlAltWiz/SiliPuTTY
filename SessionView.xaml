@@ -1,4 +1,4 @@
-<UserControl x:Class="SillyPutty.SessionView"
+<UserControl x:Class="SiliPuTTY.SessionView"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  Background="#0B1117" Foreground="#E8F1F8" FontFamily="Segoe UI">
@@ -7,8 +7,8 @@
   <Border Grid.Row="0" Background="{StaticResource Panel}" CornerRadius="8" Padding="10" Margin="0,0,0,8">
    <DockPanel>
     <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-     <Image Source="Assets/sillyputty.png" Width="28" Height="28" Margin="0,0,8,0" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
-     <TextBlock Text="SillyPutty" FontWeight="Bold" FontSize="20" Foreground="#E8F1F8" VerticalAlignment="Center" Margin="0,0,20,0"/>
+     <Image Source="Assets/siliputty.png" Width="28" Height="28" Margin="0,0,8,0" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+     <TextBlock Text="SiliPuTTY" FontWeight="Bold" FontSize="20" Foreground="#E8F1F8" VerticalAlignment="Center" Margin="0,0,20,0"/>
      <ComboBox x:Name="ProfileBox" Width="125" Margin="0,0,6,0" ToolTip="Saved session profile" SelectionChanged="ProfileBox_SelectionChanged"/>
      <ComboBox x:Name="SessionType" Width="145" SelectedIndex="0" Margin="0,0,6,0">
       <ComboBoxItem Content="Local PowerShell"/><ComboBoxItem Content="Kali (WSL)"/><ComboBoxItem Content="SSH"/>

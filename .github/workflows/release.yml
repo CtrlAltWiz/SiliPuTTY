@@ -23,24 +23,24 @@ jobs:
         shell: pwsh
         run: |
           $tagVersion = "${{ github.ref_name }}".TrimStart('v')
-          [xml]$project = Get-Content SillyPutty.csproj
+          [xml]$project = Get-Content SiliPuTTY.csproj
           $projectVersion = $project.Project.PropertyGroup.Version
           if ($tagVersion -ne $projectVersion) {
             throw "Tag version '$tagVersion' does not match project version '$projectVersion'."
           }
 
       - name: Build
-        run: dotnet build SillyPutty.csproj -c Release
+        run: dotnet build SiliPuTTY.csproj -c Release
 
       - name: Test
-        run: dotnet run --project tests/SillyPutty.Tests/SillyPutty.Tests.csproj -c Release
+        run: dotnet run --project tests/SiliPuTTY.Tests/SiliPuTTY.Tests.csproj -c Release
 
       - name: Publish self-contained application
         shell: pwsh
         run: |
           $version = "${{ github.ref_name }}".TrimStart('v')
-          dotnet publish SillyPutty.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o artifacts/SillyPutty-win-x64
-          Compress-Archive -Path artifacts/SillyPutty-win-x64/* -DestinationPath "artifacts/SillyPutty-$version-win-x64.zip"
+          dotnet publish SiliPuTTY.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o artifacts/SiliPuTTY-win-x64
+          Compress-Archive -Path artifacts/SiliPuTTY-win-x64/* -DestinationPath "artifacts/SiliPuTTY-$version-win-x64.zip"
 
       - name: Install Inno Setup
         shell: pwsh
@@ -51,15 +51,15 @@ jobs:
         run: |
           $version = "${{ github.ref_name }}".TrimStart('v')
           $compiler = Join-Path ${env:ProgramFiles(x86)} "Inno Setup 6\ISCC.exe"
-          & $compiler "/DMyAppVersion=$version" "installer\SillyPutty.iss"
+          & $compiler "/DMyAppVersion=$version" "installer\SiliPuTTY.iss"
 
       - name: Create checksums
         shell: pwsh
         run: |
           $version = "${{ github.ref_name }}".TrimStart('v')
           $files = @(
-            "artifacts/SillyPutty-$version-win-x64.zip",
-            "artifacts/SillyPutty-$version-Setup.exe"
+            "artifacts/SiliPuTTY-$version-win-x64.zip",
+            "artifacts/SiliPuTTY-$version-Setup.exe"
           )
           $lines = foreach ($file in $files) {
             $hash = (Get-FileHash $file -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -75,10 +75,10 @@ jobs:
           $version = "${{ github.ref_name }}".TrimStart('v')
           $releaseArgs = @(
             "release", "create", "${{ github.ref_name }}",
-            "artifacts/SillyPutty-$version-win-x64.zip",
-            "artifacts/SillyPutty-$version-Setup.exe",
+            "artifacts/SiliPuTTY-$version-win-x64.zip",
+            "artifacts/SiliPuTTY-$version-Setup.exe",
             "artifacts/SHA256SUMS.txt",
-            "--title", "SillyPutty $version",
+            "--title", "SiliPuTTY $version",
             "--generate-notes",
             "--verify-tag"
           )

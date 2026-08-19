@@ -1,7 +1,7 @@
-<Window x:Class="SillyPutty.ConfigurationWindow"
+<Window x:Class="SiliPuTTY.ConfigurationWindow"
  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
- Title="SillyPutty Configuration" Icon="Assets/sillyputty.ico" Width="850" Height="650" MinWidth="720" MinHeight="520"
+ Title="SiliPuTTY Configuration" Icon="Assets/siliputty.ico" Width="850" Height="650" MinWidth="720" MinHeight="520"
  WindowStartupLocation="CenterOwner" Background="#0B1117" Foreground="#E8F1F8" FontFamily="Segoe UI">
  <Window.Resources>
   <Style TargetType="TextBlock"><Setter Property="Foreground" Value="#569DE5"/></Style>

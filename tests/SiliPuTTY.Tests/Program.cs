@@ -1,4 +1,4 @@
-using SillyPutty;
+using SiliPuTTY;
 
 var failures = new List<string>();
 void Check(bool condition, string name) { if (!condition) failures.Add(name); }
@@ -19,4 +19,4 @@ Check(!NetworkPolicy.TryParsePrivate24("8.8.8.0/24", out _), "public network rej
 Check(!NetworkPolicy.TryParsePrivate24("192.168.1.0/16", out _), "non-/24 rejected");
 
 if (failures.Count > 0) { Console.Error.WriteLine("FAILED: " + string.Join(", ", failures)); return 1; }
-Console.WriteLine("All SillyPutty smoke tests passed."); return 0;
+Console.WriteLine("All SiliPuTTY smoke tests passed."); return 0;

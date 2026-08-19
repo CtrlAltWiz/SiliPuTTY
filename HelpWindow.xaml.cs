@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace SillyPutty;
+namespace SiliPuTTY;
 
 public partial class HelpWindow : Window
 {
