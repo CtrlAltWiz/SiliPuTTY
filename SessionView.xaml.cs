@@ -27,6 +27,7 @@ public partial class SessionView : UserControl
     private string? _remoteListingToken;
     private bool _capturingRemoteListing;
     private bool _remoteBrowsingReady;
+    private string _remoteDirectory = "";
     private readonly List<string> _remoteListingLines = [];
     private int _sessionPort;
     private string _sessionUsername = "";
@@ -356,10 +357,12 @@ public partial class SessionView : UserControl
 
     private async Task ExecuteAsync(string command)
     {
+        var displayCommand = command;
         var changedDirectory = TryChangeDirectory(command);
         if (_sessionProcess is not { HasExited: false } && !await ConnectSessionAsync()) return;
         if (changedDirectory && _mode == SessionMode.PowerShell) command = $"Set-Location -LiteralPath '{_currentDirectory.Replace("'", "''")}'";
-        Append($"\n{PromptText.Text} {command}\n"); Log($"> {command}\n");
+        if (_mode == SessionMode.Ssh && ActivePlatform == PlatformKind.Windows) command = BuildEncodedPowerShellCommand(command, true);
+        Append($"\n{PromptText.Text} {displayCommand}\n"); Log($"> {displayCommand}\n");
         try
         {
             await _sessionProcess!.StandardInput.WriteLineAsync(command); await _sessionProcess.StandardInput.FlushAsync();
@@ -370,7 +373,8 @@ public partial class SessionView : UserControl
 
     private ProcessStartInfo BuildSessionProcess()
     {
-        var psi = new ProcessStartInfo { UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true, WorkingDirectory = _currentDirectory, StandardInputEncoding = Encoding.UTF8, StandardOutputEncoding = Encoding.UTF8, StandardErrorEncoding = Encoding.UTF8 };
+        var utf8WithoutBom = new UTF8Encoding(false);
+        var psi = new ProcessStartInfo { UseShellExecute = false, RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true, WorkingDirectory = _currentDirectory, StandardInputEncoding = utf8WithoutBom, StandardOutputEncoding = utf8WithoutBom, StandardErrorEncoding = utf8WithoutBom };
         if (_mode == SessionMode.Kali) { psi.FileName = "wsl.exe"; psi.ArgumentList.Add("-d"); psi.ArgumentList.Add("kali-linux"); psi.ArgumentList.Add("--"); psi.ArgumentList.Add("bash"); psi.ArgumentList.Add("--noprofile"); psi.ArgumentList.Add("--norc"); }
         else if (_mode == SessionMode.Ssh)
         {
@@ -443,8 +447,9 @@ public partial class SessionView : UserControl
         var token = Guid.NewGuid().ToString("N");
         _remoteListingToken = token; _capturingRemoteListing = false; _remoteListingLines.Clear();
         var begin = $"__SP_FILES_BEGIN_{token}__"; var end = $"__SP_FILES_END_{token}__";
+        var script = $"$p=(Get-Location).Path; Write-Output \"{begin}\"; Write-Output (\"P|\"+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($p))); Get-ChildItem -LiteralPath . -Force | ForEach-Object {{ $t=if($_.PSIsContainer){{\"D\"}}else{{\"F\"}}; Write-Output ($t+\"|\"+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($_.Name))) }}; Write-Output \"{end}\"";
         var command = ActivePlatform == PlatformKind.Windows
-            ? $"powershell -NoProfile -Command '$p=(Get-Location).Path; Write-Output \"{begin}\"; Write-Output (\"P|\"+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($p))); Get-ChildItem -LiteralPath . -Force | ForEach-Object {{ $t=if($_.PSIsContainer){{\"D\"}}else{{\"F\"}}; Write-Output ($t+\"|\"+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($_.Name))) }}; Write-Output \"{end}\"'"
+            ? BuildEncodedPowerShellCommand(script, true)
             : $"printf '%s\\n' '{begin}'; p=$(pwd | base64 | tr -d '\\r\\n'); printf 'P|%s\\n' \"$p\"; for f in .[!.]* ..?* *; do [ -e \"$f\" ] || continue; if [ -d \"$f\" ]; then t=D; else t=F; fi; n=$(printf '%s' \"${{f#./}}\" | base64 | tr -d '\\r\\n'); printf '%s|%s\\n' \"$t\" \"$n\"; done; printf '%s\\n' '{end}'";
         try
         {
@@ -498,7 +503,7 @@ public partial class SessionView : UserControl
             }
             if (path == null) throw new InvalidDataException("The remote host returned an incomplete directory listing.");
             FileList.ItemsSource = entries.OrderByDescending(x => x.Name == "..").ThenByDescending(x => x.IsDirectory).ThenBy(x => x.Name, StringComparer.OrdinalIgnoreCase).ToList();
-            PathText.Text = path; _remoteBrowsingReady = true;
+            PathText.Text = path; _remoteDirectory = path; _remoteBrowsingReady = true;
         }
         catch (Exception ex) { Append($"[files] {ex.Message}\n"); }
         finally { _remoteListingLines.Clear(); }
@@ -511,8 +516,15 @@ public partial class SessionView : UserControl
         {
             if (!item.IsDirectory) { Append($"[files] {item.Name} is remote. File download/open is not implemented yet.\n"); return; }
             if (_sessionProcess is not { HasExited: false }) return;
+            if (ActivePlatform == PlatformKind.Windows)
+            {
+                _remoteDirectory = item.Name == ".."
+                    ? Directory.GetParent(_remoteDirectory)?.FullName ?? _remoteDirectory
+                    : Path.Combine(_remoteDirectory, item.Name);
+                await RequestRemoteFilesAsync(true); return;
+            }
             var escaped = item.FullPath.Replace("'", ActivePlatform == PlatformKind.Windows ? "''" : "'\\''");
-            var command = ActivePlatform == PlatformKind.Windows ? $"Set-Location -LiteralPath '{escaped}'" : $"cd -- '{escaped}'";
+            var command = $"cd -- '{escaped}'";
             try
             {
                 await _sessionProcess.StandardInput.WriteLineAsync(command); await _sessionProcess.StandardInput.FlushAsync();
@@ -538,9 +550,18 @@ public partial class SessionView : UserControl
 
     private void HandleSessionOutput(string text)
     {
+        text = StripTerminalControlSequences(text);
+        if (text.Length == 0) return;
         if (TryHandleRemoteListingLine(text)) return;
         Append(text); Log(text);
         var lower = text.ToLowerInvariant();
+        if (_mode == SessionMode.Ssh && PlatformSelector.SelectedIndex == 0 && _detectedPlatform == PlatformKind.Default &&
+            (lower.Contains("microsoft windows [version") || Regex.IsMatch(text, @"[a-z]:\\", RegexOptions.IgnoreCase)))
+        {
+            _detectedPlatform = PlatformKind.Windows; RebuildTools();
+            Append("[detect] Windows command shell detected; Windows tools and remote file browsing are now active.\n");
+            _ = InitializeWindowsRemoteShellAsync();
+        }
         if (!_hostKeyWarningShown && (lower.Contains("authenticity of host") || lower.Contains("host key is not cached")))
         {
             _hostKeyWarningShown = true; StatusText.Text = "Verify host key";
@@ -598,6 +619,29 @@ public partial class SessionView : UserControl
         if (portMatch.Success) { destination = portMatch.Groups[1].Value; port = int.Parse(portMatch.Groups[2].Value); }
         if (!destination.Contains('@') && !string.IsNullOrWhiteSpace(_sessionUsername)) destination = $"{_sessionUsername}@{destination}";
         return destination;
+    }
+    private string BuildEncodedPowerShellCommand(string command, bool useRemoteDirectory)
+    {
+        if (useRemoteDirectory && !string.IsNullOrWhiteSpace(_remoteDirectory))
+            command = $"Set-Location -LiteralPath '{_remoteDirectory.Replace("'", "''")}'; {command}";
+        var encoded = Convert.ToBase64String(Encoding.Unicode.GetBytes(command));
+        return $"powershell.exe -NoLogo -NoProfile -EncodedCommand {encoded}";
+    }
+    private async Task InitializeWindowsRemoteShellAsync()
+    {
+        try
+        {
+            if (_sessionProcess is not { HasExited: false }) return;
+            await _sessionProcess.StandardInput.WriteLineAsync("@echo off"); await _sessionProcess.StandardInput.FlushAsync();
+            await RequestRemoteFilesAsync(false);
+        }
+        catch (Exception ex) { Append($"[shell] Could not initialize the Windows remote shell: {ex.Message}\n"); }
+    }
+    private static string StripTerminalControlSequences(string text)
+    {
+        text = Regex.Replace(text, "\\x1B\\][^\\x07]*(?:\\x07|\\x1B\\\\)", "");
+        text = Regex.Replace(text, "\\x1B\\[[0-?]*[ -/]*[@-~]", "");
+        return text.Replace("\a", "");
     }
     private static Brush ParseBrush(string value, Color fallback)
     { try { return (Brush)new BrushConverter().ConvertFromString(value)!; } catch { return new SolidColorBrush(fallback); } }

@@ -19,6 +19,7 @@ coverage/
 packages/
 publish/
 artifacts/
+.dotnet-cli/
 *.nupkg
 
 # OS-generated files

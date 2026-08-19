@@ -1,6 +1,6 @@
 #define MyAppName "SiliPuTTY"
 #ifndef MyAppVersion
-  #define MyAppVersion "0.3.1-alpha"
+  #define MyAppVersion "0.3.2-alpha"
 #endif
 #define MyAppPublisher "CtrlAltWiz"
 #define MyAppExeName "SiliPuTTY.exe"
