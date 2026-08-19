@@ -23,7 +23,7 @@ public partial class MainWindow : Window
         {
             Text = initialName, MinWidth = 74, MaxWidth = 180, Tag = "TabName",
             VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis,
-            Foreground = new SolidColorBrush(Color.FromRgb(220, 231, 238)), Margin = new Thickness(3, 1, 3, 1)
+            Foreground = new SolidColorBrush(Color.FromRgb(132, 149, 167)), Margin = new Thickness(3, 1, 3, 1)
         };
         var editor = new TextBox
         {
@@ -102,7 +102,7 @@ public partial class MainWindow : Window
         foreach (var item in SessionTabs.Items.OfType<TabItem>())
         {
             if (item.Header is StackPanel tabHeader && tabHeader.Children[0] is TextBlock tabName)
-                tabName.Foreground = new SolidColorBrush(item.IsSelected ? Color.FromRgb(176, 56, 217) : Color.FromRgb(220, 231, 238));
+                tabName.Foreground = new SolidColorBrush(item.IsSelected ? Color.FromRgb(33, 18, 41) : Color.FromRgb(132, 149, 167));
         }
         if (SessionTabs.SelectedItem is TabItem { Header: StackPanel header } && header.Children[0] is TextBlock name)
             Title = $"SiliPuTTY — {name.Text}";
