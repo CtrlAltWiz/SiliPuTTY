@@ -14,7 +14,7 @@
       <ComboBoxItem Content="Local PowerShell"/><ComboBoxItem Content="Kali (WSL)"/><ComboBoxItem Content="SSH"/>
      </ComboBox>
      <TextBox x:Name="HostBox" Width="185" Text="user@host" ToolTip="SSH user@host" Margin="0,0,6,0"/>
-     <Button Content="Connect" Click="Connect_Click" Background="#176B50"/>
+     <Button x:Name="ConnectButton" Content="Connect" Click="Connect_Click" Background="#176B50"/>
      <TextBlock Text="Platform:" Foreground="{StaticResource Muted}" VerticalAlignment="Center" Margin="12,0,5,0"/>
      <ComboBox x:Name="PlatformSelector" Width="105" SelectedIndex="0" SelectionChanged="PlatformSelector_SelectionChanged">
       <ComboBoxItem Content="Auto"/><ComboBoxItem Content="Default"/><ComboBoxItem Content="Windows"/><ComboBoxItem Content="Linux"/><ComboBoxItem Content="macOS"/>

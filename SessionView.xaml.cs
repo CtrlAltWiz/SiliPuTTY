@@ -23,6 +23,7 @@ public partial class SessionView : UserControl
     private StreamWriter? _logWriter;
     private bool _intentionalDisconnect;
     private bool _hostKeyWarningShown;
+    private bool _connectionInProgress;
     private string? _remoteListingToken;
     private bool _capturingRemoteListing;
     private bool _remoteBrowsingReady;
@@ -172,22 +173,29 @@ public partial class SessionView : UserControl
 
     private async Task<bool> ConnectSessionAsync()
     {
-        await DisconnectCoreAsync(false);
-        _mode = SessionType.SelectedIndex switch { 1 => SessionMode.Kali, 2 => SessionMode.Ssh, _ => SessionMode.PowerShell };
-        if (_mode == SessionMode.Ssh && !Regex.IsMatch(HostBox.Text.Trim(), @"^(?:[\w.-]+@)?[\w.-]+(?::\d+)?$"))
-        { MessageBox.Show("Enter an SSH destination like host or user@host.", "SSH destination required"); return false; }
-        StatusText.Text = "Detecting platform…";
-        _detectedPlatform = await DetectPlatformAsync();
-        if (PlatformSelector.SelectedIndex == 0) RebuildTools();
+        if (_connectionInProgress) return false;
+        _connectionInProgress = true; ConnectButton.IsEnabled = false;
         try
         {
+            await DisconnectCoreAsync(false);
+            _mode = SessionType.SelectedIndex switch { 1 => SessionMode.Kali, 2 => SessionMode.Ssh, _ => SessionMode.PowerShell };
+            if (_mode == SessionMode.Ssh && !Regex.IsMatch(HostBox.Text.Trim(), @"^(?:[\w.-]+@)?[\w.-]+(?::\d+)?$"))
+            { MessageBox.Show("Enter an SSH destination like host or user@host.", "SSH destination required"); return false; }
+            if (_mode == SessionMode.Ssh)
+            {
+                StatusText.Text = "Verifying host key…";
+                if (!await EnsureSshHostKeyAsync()) { StatusText.Text = "Ready"; return false; }
+            }
+            StatusText.Text = "Detecting platform…";
+            _detectedPlatform = await DetectPlatformAsync();
+            if (PlatformSelector.SelectedIndex == 0) RebuildTools();
             var psi = BuildSessionProcess();
             _intentionalDisconnect = false; _hostKeyWarningShown = false;
             var sessionProcess = new Process { StartInfo = psi, EnableRaisingEvents = true };
             _sessionProcess = sessionProcess;
-            sessionProcess.OutputDataReceived += (_, a) => { if (a.Data != null) Dispatcher.Invoke(() => HandleSessionOutput(a.Data + "\n")); };
-            sessionProcess.ErrorDataReceived += (_, a) => { if (a.Data != null) Dispatcher.Invoke(() => HandleSessionOutput(a.Data + "\n")); };
-            sessionProcess.Exited += (_, _) => Dispatcher.Invoke(() => HandleSessionExited(sessionProcess));
+            sessionProcess.OutputDataReceived += (_, a) => { if (a.Data != null) Dispatcher.BeginInvoke(() => HandleSessionOutput(a.Data + "\n")); };
+            sessionProcess.ErrorDataReceived += (_, a) => { if (a.Data != null) Dispatcher.BeginInvoke(() => HandleSessionOutput(a.Data + "\n")); };
+            sessionProcess.Exited += (_, _) => Dispatcher.BeginInvoke(() => HandleSessionExited(sessionProcess));
             sessionProcess.Start(); sessionProcess.BeginOutputReadLine(); sessionProcess.BeginErrorReadLine();
             StartLogging();
             StatusDot.Fill = new SolidColorBrush(Color.FromRgb(56, 217, 150));
@@ -199,7 +207,7 @@ public partial class SessionView : UserControl
             {
                 FileHeading.Text = "REMOTE FILES"; FileList.ItemsSource = null;
                 PathText.Text = "Complete SSH sign-in, then click ↻";
-                Append("[security] Verify new host-key fingerprints before accepting them. Use 🔒 Secret for password or passphrase prompts so credentials are not logged.\n");
+                Append("[auth] If SSH requires a password or key passphrase, use the secure authentication window that opens automatically. The 🔒 Secret button is for prompts inside an established session.\n");
                 Append("[files] After SSH sign-in completes, click the file-browser refresh button to load the remote home directory.\n");
             }
             else { FileHeading.Text = "LOCAL FILES"; RefreshFiles(); }
@@ -210,6 +218,62 @@ public partial class SessionView : UserControl
             Append($"[connect error] {ex.Message}\n"); StatusText.Text = "Connection failed";
             StatusDot.Fill = new SolidColorBrush(Color.FromRgb(176, 56, 217)); return false;
         }
+        finally { _connectionInProgress = false; ConnectButton.IsEnabled = true; }
+    }
+
+    private async Task<bool> EnsureSshHostKeyAsync()
+    {
+        var destination = GetSshDestination(out var port);
+        var host = destination.Contains('@') ? destination[(destination.LastIndexOf('@') + 1)..] : destination;
+        var lookupHost = port == 22 ? host : $"[{host}]:{port}";
+        try
+        {
+            var known = await RunUtilityAsync("ssh-keygen.exe", ["-F", lookupHost], TimeSpan.FromSeconds(5));
+            if (known.ExitCode == 0 && !string.IsNullOrWhiteSpace(known.Output)) return true;
+
+            var scanArgs = new List<string> { "-T", "5" };
+            if (port != 22) { scanArgs.Add("-p"); scanArgs.Add(port.ToString()); }
+            scanArgs.Add(host);
+            var scan = await RunUtilityAsync("ssh-keyscan.exe", scanArgs, TimeSpan.FromSeconds(8));
+            var keyLines = scan.Output.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries).Where(x => !x.StartsWith('#')).Distinct().ToList();
+            if (keyLines.Count == 0) throw new InvalidOperationException("The host did not provide a key before the verification timeout.");
+            var fingerprints = keyLines.Select(FormatHostKeyFingerprint).Where(x => x != null).Distinct();
+            var message = $"This host is not yet trusted:\n\n{host}:{port}\n\nPresented fingerprints:\n{string.Join("\n", fingerprints)}\n\nCompare these fingerprints with the desktop or its administrator. Trust and save this host key?";
+            if (MessageBox.Show(message, "Verify SSH host key", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return false;
+
+            var sshFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".ssh"); Directory.CreateDirectory(sshFolder);
+            var knownHosts = Path.Combine(sshFolder, "known_hosts");
+            await File.AppendAllTextAsync(knownHosts, string.Join(Environment.NewLine, keyLines) + Environment.NewLine, Encoding.UTF8);
+            Append($"[security] Saved the explicitly approved host key for {lookupHost}.\n"); return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"SiliPuTTY could not verify the SSH host key.\n\n{ex.Message}", "SSH host-key verification failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            return false;
+        }
+    }
+
+    private static string? FormatHostKeyFingerprint(string line)
+    {
+        var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries); if (parts.Length < 3) return null;
+        try
+        {
+            var hash = System.Security.Cryptography.SHA256.HashData(Convert.FromBase64String(parts[2]));
+            return $"{parts[1]}  SHA256:{Convert.ToBase64String(hash).TrimEnd('=')}";
+        }
+        catch { return null; }
+    }
+
+    private static async Task<(int ExitCode, string Output, string Error)> RunUtilityAsync(string fileName, IEnumerable<string> arguments, TimeSpan timeout)
+    {
+        var psi = new ProcessStartInfo(fileName) { UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true };
+        foreach (var argument in arguments) psi.ArgumentList.Add(argument);
+        using var process = Process.Start(psi) ?? throw new InvalidOperationException($"Could not start {fileName}.");
+        var outputTask = process.StandardOutput.ReadToEndAsync(); var errorTask = process.StandardError.ReadToEndAsync();
+        using var cancellation = new CancellationTokenSource(timeout);
+        try { await process.WaitForExitAsync(cancellation.Token); }
+        catch (OperationCanceledException) { try { process.Kill(true); } catch { } throw new TimeoutException($"{fileName} timed out."); }
+        return (process.ExitCode, await outputTask, await errorTask);
     }
 
     private async Task<PlatformKind> DetectPlatformAsync()
@@ -319,6 +383,16 @@ public partial class SessionView : UserControl
             if (SettingsStore.Current.X11Forwarding) psi.ArgumentList.Add("-X");
             if (!string.IsNullOrWhiteSpace(_sessionPrivateKeyPath)) { psi.ArgumentList.Add("-i"); psi.ArgumentList.Add(_sessionPrivateKeyPath); }
             psi.ArgumentList.Add("-o"); psi.ArgumentList.Add($"ServerAliveInterval={Math.Max(0, SettingsStore.Current.KeepAliveSeconds)}");
+            psi.ArgumentList.Add("-o"); psi.ArgumentList.Add("StrictHostKeyChecking=yes");
+            psi.ArgumentList.Add("-o"); psi.ArgumentList.Add("NumberOfPasswordPrompts=3");
+            var executablePath = Environment.ProcessPath ?? Process.GetCurrentProcess().MainModule?.FileName;
+            if (!string.IsNullOrWhiteSpace(executablePath))
+            {
+                psi.Environment["SSH_ASKPASS"] = executablePath;
+                psi.Environment["SSH_ASKPASS_REQUIRE"] = "force";
+                psi.Environment["DISPLAY"] = "SiliPuTTY";
+                psi.Environment["SILIPUTTY_ASKPASS"] = "1";
+            }
             psi.ArgumentList.Add(destination);
         }
         else { psi.FileName = "powershell.exe"; psi.ArgumentList.Add("-NoLogo"); psi.ArgumentList.Add("-NoProfile"); psi.ArgumentList.Add("-NoExit"); }
