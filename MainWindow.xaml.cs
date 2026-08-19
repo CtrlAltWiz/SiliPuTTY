@@ -18,12 +18,20 @@ public partial class MainWindow : Window
     private void AddSession()
     {
         var session = new SessionView();
-        var name = new TextBox
+        var initialName = $"Session {++_sessionNumber}";
+        var name = new TextBlock
         {
-            Text = $"Session {++_sessionNumber}", MinWidth = 74, MaxWidth = 180,
-            Background = Brushes.Transparent, Foreground = new SolidColorBrush(Color.FromRgb(220, 231, 238)),
-            BorderThickness = new Thickness(0), Padding = new Thickness(3, 1, 3, 1)
+            Text = initialName, MinWidth = 74, MaxWidth = 180, Tag = "TabName",
+            VerticalAlignment = VerticalAlignment.Center, TextTrimming = TextTrimming.CharacterEllipsis,
+            Foreground = new SolidColorBrush(Color.FromRgb(132, 149, 167)), Margin = new Thickness(3, 1, 3, 1)
         };
+        var editor = new TextBox
+        {
+            Text = initialName, MinWidth = 74, MaxWidth = 180, Tag = "TabNameEditor",
+            Visibility = Visibility.Collapsed, BorderThickness = new Thickness(1), Padding = new Thickness(3, 1, 3, 1)
+        };
+        var edit = new Button();
+        if (SessionTabs.TryFindResource("TabEditButtonStyle") is Style editStyle) edit.Style = editStyle;
         var close = new Button
         {
             Content = "×", ToolTip = "Close session", Padding = new Thickness(5, 0, 5, 1),
@@ -31,15 +39,37 @@ public partial class MainWindow : Window
             BorderThickness = new Thickness(0), FontSize = 16
         };
         var header = new StackPanel { Orientation = Orientation.Horizontal };
-        header.Children.Add(name); header.Children.Add(close);
+        header.Children.Add(name); header.Children.Add(editor); header.Children.Add(edit); header.Children.Add(close);
         var tab = new TabItem { Header = header, Content = session };
         close.Click += (_, _) => CloseSession(tab);
-        session.TitleSuggested += title => name.Text = title;
-        name.TextChanged += (_, _) => { if (SessionTabs.SelectedItem == tab) Title = $"SiliPuTTY — {name.Text}"; };
+        edit.Click += (_, e) => { e.Handled = true; BeginTabRename(name, editor); };
+        editor.KeyDown += (_, e) =>
+        {
+            if (e.Key == Key.Enter) { CommitTabRename(tab, name, editor); e.Handled = true; }
+            else if (e.Key == Key.Escape) { CancelTabRename(name, editor); e.Handled = true; }
+        };
+        editor.LostKeyboardFocus += (_, _) => CommitTabRename(tab, name, editor);
+        session.TitleSuggested += title => { name.Text = title; editor.Text = title; if (SessionTabs.SelectedItem == tab) Title = $"SiliPuTTY — {title}"; };
         SessionTabs.Items.Add(tab);
         SessionTabs.SelectedItem = tab;
-        name.SelectAll();
     }
+
+    private static void BeginTabRename(TextBlock name, TextBox editor)
+    {
+        editor.Text = name.Text; name.Visibility = Visibility.Collapsed; editor.Visibility = Visibility.Visible;
+        editor.Focus(); editor.SelectAll();
+    }
+
+    private void CommitTabRename(TabItem tab, TextBlock name, TextBox editor)
+    {
+        if (editor.Visibility != Visibility.Visible) return;
+        var value = editor.Text.Trim(); if (value.Length == 0) value = name.Text;
+        name.Text = value; editor.Text = value; editor.Visibility = Visibility.Collapsed; name.Visibility = Visibility.Visible;
+        if (SessionTabs.SelectedItem == tab) Title = $"SiliPuTTY — {value}";
+    }
+
+    private static void CancelTabRename(TextBlock name, TextBox editor)
+    { editor.Text = name.Text; editor.Visibility = Visibility.Collapsed; name.Visibility = Visibility.Visible; }
 
     private void CloseSession(TabItem tab)
     {
@@ -69,7 +99,12 @@ public partial class MainWindow : Window
 
     private void SessionTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (SessionTabs.SelectedItem is TabItem { Header: StackPanel header } && header.Children[0] is TextBox name)
+        foreach (var item in SessionTabs.Items.OfType<TabItem>())
+        {
+            if (item.Header is StackPanel tabHeader && tabHeader.Children[0] is TextBlock tabName)
+                tabName.Foreground = new SolidColorBrush(item.IsSelected ? Color.FromRgb(33, 18, 41) : Color.FromRgb(132, 149, 167));
+        }
+        if (SessionTabs.SelectedItem is TabItem { Header: StackPanel header } && header.Children[0] is TextBlock name)
             Title = $"SiliPuTTY — {name.Text}";
     }
 }

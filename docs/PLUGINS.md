@@ -21,11 +21,16 @@ Place manifests in `%LOCALAPPDATA%\SiliPuTTY\Plugins`, then enable them under **
       "Windows": "Resolve-DnsName {target}",
       "Linux": "dig {target}",
       "MacOS": "dig {target}",
-      "Default": "ping {target}"
+      "Default": "ping {target}",
+      "Cisco": "ping {target}",
+      "Fortinet": "execute ping {target}",
+      "PaloAlto": "ping host {target}"
     }
   }]
 }
 ```
+
+Platform keys may be `Default`, `Windows`, `Linux`, `MacOS`, `Cisco`, `Aruba`, `Fortinet`, `PaloAlto`, or `Juniper`. A tool can omit profiles it does not support; SiliPuTTY falls back to its `Default` command when available.
 
 Allowed capabilities are `session-command`, `network-access`, `file-read`, and `file-write`. Commands run inside the active session. Target values use the same restricted-character validation as built-in tools. Capabilities are permission disclosures in version 0.2, not an operating-system sandbox; command-line tools retain the permissions of the active session.
 

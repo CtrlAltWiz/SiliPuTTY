@@ -53,6 +53,25 @@ jobs:
           $compiler = Join-Path ${env:ProgramFiles(x86)} "Inno Setup 6\ISCC.exe"
           & $compiler "/DMyAppVersion=$version" "installer\SiliPuTTY.iss"
 
+      - name: Smoke test installer
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          $installer = Resolve-Path "artifacts\SiliPuTTY-$version-Setup.exe"
+          $installDir = Join-Path $env:RUNNER_TEMP "SiliPuTTY-smoke"
+          $install = Start-Process $installer -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/DIR=$installDir" -Wait -PassThru
+          if ($install.ExitCode -ne 0) { throw "Installer exited with code $($install.ExitCode)." }
+          $app = Join-Path $installDir "SiliPuTTY.exe"
+          if (!(Test-Path $app)) { throw "Installed executable was not found." }
+          $process = Start-Process $app -PassThru
+          Start-Sleep -Seconds 5
+          if ($process.HasExited) { throw "Installed application exited during launch smoke test with code $($process.ExitCode)." }
+          Stop-Process -Id $process.Id -Force
+          $uninstaller = Join-Path $installDir "unins000.exe"
+          if (!(Test-Path $uninstaller)) { throw "Uninstaller was not found." }
+          $uninstall = Start-Process $uninstaller -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -PassThru
+          if ($uninstall.ExitCode -ne 0) { throw "Uninstaller exited with code $($uninstall.ExitCode)." }
+
       - name: Create checksums
         shell: pwsh
         run: |

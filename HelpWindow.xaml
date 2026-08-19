@@ -18,12 +18,12 @@
     </Border>
     <Border Background="#121B24" CornerRadius="8" Padding="14" Margin="0,0,0,10">
      <StackPanel><TextBlock Text="2. Platform detection" FontWeight="SemiBold" FontSize="16"/>
-      <TextBlock TextWrapping="Wrap" Margin="0,7,0,0" LineHeight="20">Auto detects Windows, Linux, or macOS and loads matching commands. Unrecognized devices use Default, intended for switches, routers, firewalls, and appliances. Use the Platform menu to override detection.</TextBlock>
+      <TextBlock TextWrapping="Wrap" Margin="0,7,0,0" LineHeight="20">Auto detects Windows, Linux, or macOS and loads matching commands. Unrecognized devices use Default. For network hardware, choose Cisco, Aruba, Fortinet, Palo Alto, Juniper, or Default from the Platform menu so tool commands match the appliance.</TextBlock>
      </StackPanel>
     </Border>
     <Border Background="#121B24" CornerRadius="8" Padding="14" Margin="0,0,0,10">
      <StackPanel><TextBlock Text="3. Terminal and files" FontWeight="SemiBold" FontSize="16"/>
-      <TextBlock TextWrapping="Wrap" Margin="0,7,0,0" LineHeight="20">Type a command and press Enter or Run. Use Up and Down for command history. In a local session, double-click a folder to change the terminal directory or a file to open it. In an SSH session, complete sign-in and click the file refresh button to browse remote folders. Opening or downloading remote files is not yet implemented.</TextBlock>
+      <TextBlock TextWrapping="Wrap" Margin="0,7,0,0" LineHeight="20">Type a command and press Enter or Run. Use Up and Down for command history. Double-click folders to navigate. Right-click a local item to open it in File Explorer. Windows SSH paths can also open through an accessible administrative share; Linux, macOS, and appliance paths remain SSH-only.</TextBlock>
      </StackPanel>
     </Border>
     <Border Background="#121B24" CornerRadius="8" Padding="14" Margin="0,0,0,10">

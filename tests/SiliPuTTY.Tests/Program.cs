@@ -12,6 +12,7 @@ Check(PluginManager.Validate(valid) == null, "valid plugin manifest");
 valid.Id = "BAD ID"; Check(PluginManager.Validate(valid) != null, "invalid plugin id rejected");
 valid.Id = "example.test"; valid.Capabilities = ["process-injection"]; Check(PluginManager.Validate(valid) != null, "unknown capability rejected");
 valid.Capabilities = ["session-command"]; valid.Tools[0].Commands = new() { ["Solaris"] = "uname" }; Check(PluginManager.Validate(valid) != null, "unknown platform rejected");
+valid.Tools[0].Commands = new() { ["Cisco"] = "show version", ["Fortinet"] = "get system status", ["PaloAlto"] = "show system info" }; Check(PluginManager.Validate(valid) == null, "appliance platform keys accepted");
 Check(typeof(App).Assembly.GetName().Version?.Major == 0, "assembly version present");
 Check(NetworkPolicy.TryParsePrivate24("192.168.10.0/24", out var prefix) && prefix == "192.168.10", "private /24 accepted");
 Check(NetworkPolicy.TryParsePrivate24("10.20.30.55/24", out _), "private 10/8 /24 accepted");

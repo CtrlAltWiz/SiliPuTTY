@@ -3,24 +3,39 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  Title="SiliPuTTY" Icon="Assets/siliputty.ico" Width="1260" Height="800" MinWidth="950" MinHeight="620"
  Background="#0B1117" Foreground="#E8F1F8" FontFamily="Segoe UI"
- PreviewKeyDown="Window_PreviewKeyDown">
+ PreviewKeyDown="Window_PreviewKeyDown" KeyboardNavigation.TabNavigation="Cycle">
  <Grid>
   <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
   <Border Grid.Row="0" Background="#121B24" BorderBrush="#263847" BorderThickness="0,0,0,1" Padding="8,6">
    <DockPanel>
-    <Button Content="＋ New Session" Click="NewTab_Click" DockPanel.Dock="Left" Background="#176B50" Padding="14,6"/>
-    <Button Content="⚙ Configure" Click="Configure_Click" DockPanel.Dock="Left" Padding="14,6"/>
-    <Button Content="◉ Network" Click="Network_Click" DockPanel.Dock="Left" Padding="14,6"/>
+    <Button Content="＋ New Session" Click="NewTab_Click" DockPanel.Dock="Left" Background="#176B50" Padding="14,6" AutomationProperties.Name="New session"/>
+    <Button Content="⚙ Configure" Click="Configure_Click" DockPanel.Dock="Left" Padding="14,6" AutomationProperties.Name="Open configuration"/>
+    <Button Content="◉ Network" Click="Network_Click" DockPanel.Dock="Left" Padding="14,6" AutomationProperties.Name="Open Network Center"/>
     <TextBlock Text="Ctrl+T new tab  •  Ctrl+W close tab  •  Edit a tab name directly" Foreground="#8495A7" VerticalAlignment="Center" Margin="12,0,0,0"/>
    </DockPanel>
   </Border>
   <TabControl x:Name="SessionTabs" Grid.Row="1" Background="#0B1117" BorderThickness="0" Padding="0" SelectionChanged="SessionTabs_SelectionChanged">
    <TabControl.Resources>
+    <Style x:Key="TabEditButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+     <Setter Property="Content" Value="✎"/><Setter Property="ToolTip" Value="Rename session"/>
+     <Setter Property="Padding" Value="4,0"/><Setter Property="Margin" Value="4,0,0,0"/>
+     <Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/>
+     <Setter Property="Foreground" Value="#8495A7"/>
+     <Setter Property="Opacity" Value="0"/><Setter Property="IsHitTestVisible" Value="False"/>
+     <Style.Triggers>
+      <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+       <Setter Property="Opacity" Value="1"/><Setter Property="IsHitTestVisible" Value="True"/>
+      </DataTrigger>
+      <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=TabItem}}" Value="True">
+       <Setter Property="Foreground" Value="#211229"/>
+      </DataTrigger>
+     </Style.Triggers>
+    </Style>
     <Style TargetType="TabItem">
      <Setter Property="Foreground" Value="#DCE7EE"/><Setter Property="Background" Value="#182633"/>
      <Setter Property="BorderBrush" Value="#304A60"/><Setter Property="Padding" Value="4"/>
      <Setter Property="Margin" Value="2,3,0,0"/>
-     <Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#B038D9"/><Setter Property="Foreground" Value="#E8F1F8"/></Trigger></Style.Triggers>
+     <Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#B038D9"/><Setter Property="Foreground" Value="#211229"/><Setter Property="BorderBrush" Value="#B038D9"/></Trigger></Style.Triggers>
     </Style>
    </TabControl.Resources>
   </TabControl>
