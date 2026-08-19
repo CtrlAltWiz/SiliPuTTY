@@ -5,7 +5,9 @@ param(
 $ErrorActionPreference = "Stop"
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $publishPath = Join-Path $projectRoot "artifacts\SillyPutty-$Runtime"
-$zipPath = Join-Path $projectRoot "artifacts\SillyPutty-0.2.0-alpha-$Runtime.zip"
+[xml]$project = Get-Content (Join-Path $projectRoot "SillyPutty.csproj")
+$version = $project.Project.PropertyGroup.Version
+$zipPath = Join-Path $projectRoot "artifacts\SillyPutty-$version-$Runtime.zip"
 dotnet publish (Join-Path $projectRoot "SillyPutty.csproj") -c Release -r $Runtime --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o $publishPath
 $exePath = Join-Path $publishPath "SillyPutty.exe"
 if ($CertificateThumbprint) {

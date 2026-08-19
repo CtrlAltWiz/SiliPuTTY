@@ -23,6 +23,10 @@ public partial class SessionView : UserControl
     private StreamWriter? _logWriter;
     private bool _intentionalDisconnect;
     private bool _hostKeyWarningShown;
+    private string? _remoteListingToken;
+    private bool _capturingRemoteListing;
+    private bool _remoteBrowsingReady;
+    private readonly List<string> _remoteListingLines = [];
     private int _sessionPort;
     private string _sessionUsername = "";
     private string _sessionPrivateKeyPath = "";
@@ -50,7 +54,7 @@ public partial class SessionView : UserControl
         RefreshFiles();
         Append("SillyPutty ready. Select a session and connect, or run local PowerShell commands.\n");
         _refreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
-        _refreshTimer.Tick += (_, _) => RefreshFiles(false);
+        _refreshTimer.Tick += async (_, _) => await RefreshActiveFilesAsync(false);
         _refreshTimer.Start();
         CommandBox.Focus();
     }
@@ -191,7 +195,14 @@ public partial class SessionView : UserControl
             TitleSuggested?.Invoke(_mode switch { SessionMode.Kali => "Kali", SessionMode.Ssh => HostBox.Text.Trim(), _ => "PowerShell" });
             PromptText.Text = _mode switch { SessionMode.Kali => "kali›", SessionMode.Ssh => "ssh›", _ => "PS›" };
             Append($"\n[session] connected: {StatusText.Text}\n");
-            if (_mode == SessionMode.Ssh) Append("[security] Verify new host-key fingerprints before accepting them. Use 🔒 Secret for password or passphrase prompts so credentials are not logged.\n");
+            if (_mode == SessionMode.Ssh)
+            {
+                FileHeading.Text = "REMOTE FILES"; FileList.ItemsSource = null;
+                PathText.Text = "Complete SSH sign-in, then click ↻";
+                Append("[security] Verify new host-key fingerprints before accepting them. Use 🔒 Secret for password or passphrase prompts so credentials are not logged.\n");
+                Append("[files] After SSH sign-in completes, click the file-browser refresh button to load the remote home directory.\n");
+            }
+            else { FileHeading.Text = "LOCAL FILES"; RefreshFiles(); }
             CommandBox.Focus(); return true;
         }
         catch (Exception ex)
@@ -259,6 +270,7 @@ public partial class SessionView : UserControl
             finally { process.Dispose(); }
         }
         StopLogging();
+        _remoteListingToken = null; _capturingRemoteListing = false; _remoteBrowsingReady = false; _remoteListingLines.Clear();
         StatusText.Text = "Ready"; StatusDot.Fill = new SolidColorBrush(Color.FromRgb(176, 56, 217));
         if (announce) Append("\n[session] disconnected\n");
     }
@@ -289,7 +301,7 @@ public partial class SessionView : UserControl
             await _sessionProcess!.StandardInput.WriteLineAsync(command); await _sessionProcess.StandardInput.FlushAsync();
         }
         catch (Exception ex) { Append($"[error] {ex.Message}\n"); }
-        finally { CommandBox.Focus(); RefreshFiles(); }
+        finally { CommandBox.Focus(); await RefreshActiveFilesAsync(false); }
     }
 
     private ProcessStartInfo BuildSessionProcess()
@@ -336,13 +348,109 @@ public partial class SessionView : UserControl
         catch (Exception ex) { if (reportErrors) Append($"[files] {ex.Message}\n"); }
     }
 
-    private void FileList_DoubleClick(object sender, MouseButtonEventArgs e)
+    private async Task RefreshActiveFilesAsync(bool reportErrors = true)
+    {
+        if (_mode != SessionMode.Ssh) { RefreshFiles(reportErrors); return; }
+        if (_sessionProcess is not { HasExited: false }) return;
+        if (!reportErrors && !_remoteBrowsingReady) return;
+        await RequestRemoteFilesAsync(reportErrors);
+    }
+
+    private async Task RequestRemoteFilesAsync(bool reportErrors)
+    {
+        if (_remoteListingToken != null || _sessionProcess is not { HasExited: false }) return;
+        if (ActivePlatform == PlatformKind.Default)
+        {
+            PathText.Text = "Remote browsing is unavailable for generic appliances";
+            if (reportErrors) Append("[files] Remote browsing requires a Windows, Linux, or macOS SSH host.\n");
+            return;
+        }
+
+        var token = Guid.NewGuid().ToString("N");
+        _remoteListingToken = token; _capturingRemoteListing = false; _remoteListingLines.Clear();
+        var begin = $"__SP_FILES_BEGIN_{token}__"; var end = $"__SP_FILES_END_{token}__";
+        var command = ActivePlatform == PlatformKind.Windows
+            ? $"powershell -NoProfile -Command '$p=(Get-Location).Path; Write-Output \"{begin}\"; Write-Output (\"P|\"+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($p))); Get-ChildItem -LiteralPath . -Force | ForEach-Object {{ $t=if($_.PSIsContainer){{\"D\"}}else{{\"F\"}}; Write-Output ($t+\"|\"+[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($_.Name))) }}; Write-Output \"{end}\"'"
+            : $"printf '%s\\n' '{begin}'; p=$(pwd | base64 | tr -d '\\r\\n'); printf 'P|%s\\n' \"$p\"; for f in .[!.]* ..?* *; do [ -e \"$f\" ] || continue; if [ -d \"$f\" ]; then t=D; else t=F; fi; n=$(printf '%s' \"${{f#./}}\" | base64 | tr -d '\\r\\n'); printf '%s|%s\\n' \"$t\" \"$n\"; done; printf '%s\\n' '{end}'";
+        try
+        {
+            await _sessionProcess.StandardInput.WriteLineAsync(command); await _sessionProcess.StandardInput.FlushAsync();
+            _ = ExpireRemoteListingAsync(token);
+        }
+        catch (Exception ex)
+        {
+            _remoteListingToken = null;
+            if (reportErrors) Append($"[files] Could not request the remote directory: {ex.Message}\n");
+        }
+    }
+
+    private async Task ExpireRemoteListingAsync(string token)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(10));
+        if (_remoteListingToken != token) return;
+        _remoteListingToken = null; _capturingRemoteListing = false; _remoteListingLines.Clear();
+        PathText.Text = "Remote listing timed out — click ↻ to retry";
+        Append("[files] The remote directory listing timed out. Confirm SSH sign-in is complete and the selected platform matches the host.\n");
+    }
+
+    private bool TryHandleRemoteListingLine(string text)
+    {
+        var token = _remoteListingToken; if (token == null) return false;
+        var line = text.TrimEnd('\r', '\n');
+        var begin = $"__SP_FILES_BEGIN_{token}__"; var end = $"__SP_FILES_END_{token}__";
+        if (line.Trim() == begin) { _capturingRemoteListing = true; _remoteListingLines.Clear(); return true; }
+        if (line.Trim() == end && _capturingRemoteListing)
+        {
+            _capturingRemoteListing = false; _remoteListingToken = null;
+            ApplyRemoteListing(); return true;
+        }
+        if (_capturingRemoteListing) { _remoteListingLines.Add(line); return true; }
+        return line.Contains(token, StringComparison.Ordinal);
+    }
+
+    private void ApplyRemoteListing()
+    {
+        try
+        {
+            var entries = new List<FileEntry> { new("..", "..", "Folder", true) };
+            string? path = null;
+            foreach (var line in _remoteListingLines)
+            {
+                var separator = line.IndexOf('|'); if (separator != 1 || line.Length < 3) continue;
+                var kind = line[0];
+                string value; try { value = Encoding.UTF8.GetString(Convert.FromBase64String(line[2..])); } catch { continue; }
+                if (kind == 'P') path = value;
+                else if (kind is 'D' or 'F') entries.Add(new(value, value, kind == 'D' ? "Folder" : "File", kind == 'D'));
+            }
+            if (path == null) throw new InvalidDataException("The remote host returned an incomplete directory listing.");
+            FileList.ItemsSource = entries.OrderByDescending(x => x.Name == "..").ThenByDescending(x => x.IsDirectory).ThenBy(x => x.Name, StringComparer.OrdinalIgnoreCase).ToList();
+            PathText.Text = path; _remoteBrowsingReady = true;
+        }
+        catch (Exception ex) { Append($"[files] {ex.Message}\n"); }
+        finally { _remoteListingLines.Clear(); }
+    }
+
+    private async void FileList_DoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (FileList.SelectedItem is not FileEntry item) return;
+        if (_mode == SessionMode.Ssh)
+        {
+            if (!item.IsDirectory) { Append($"[files] {item.Name} is remote. File download/open is not implemented yet.\n"); return; }
+            if (_sessionProcess is not { HasExited: false }) return;
+            var escaped = item.FullPath.Replace("'", ActivePlatform == PlatformKind.Windows ? "''" : "'\\''");
+            var command = ActivePlatform == PlatformKind.Windows ? $"Set-Location -LiteralPath '{escaped}'" : $"cd -- '{escaped}'";
+            try
+            {
+                await _sessionProcess.StandardInput.WriteLineAsync(command); await _sessionProcess.StandardInput.FlushAsync();
+                await RequestRemoteFilesAsync(true);
+            }
+            catch (Exception ex) { Append($"[files] Could not change the remote directory: {ex.Message}\n"); }
+            return;
+        }
         if (item.IsDirectory) { _currentDirectory = item.FullPath; Append($"\nPS› cd \"{item.FullPath}\"\n"); RefreshFiles(); }
         else Process.Start(new ProcessStartInfo(item.FullPath) { UseShellExecute = true });
     }
-    private void Refresh_Click(object sender, RoutedEventArgs e) => RefreshFiles();
+    private async void Refresh_Click(object sender, RoutedEventArgs e) => await RefreshActiveFilesAsync();
     private void Clear_Click(object sender, RoutedEventArgs e) => TerminalOutput.Clear();
     private void Help_Click(object sender, RoutedEventArgs e) => new HelpWindow { Owner = Window.GetWindow(this) }.ShowDialog();
     private async void SendSecret_Click(object sender, RoutedEventArgs e)
@@ -356,6 +464,7 @@ public partial class SessionView : UserControl
 
     private void HandleSessionOutput(string text)
     {
+        if (TryHandleRemoteListingLine(text)) return;
         Append(text); Log(text);
         var lower = text.ToLowerInvariant();
         if (!_hostKeyWarningShown && (lower.Contains("authenticity of host") || lower.Contains("host key is not cached")))

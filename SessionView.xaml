@@ -53,7 +53,7 @@
     </ScrollViewer>
     <Border Grid.Row="3" Background="{StaticResource Panel}" CornerRadius="8" Padding="10">
      <Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
-      <DockPanel><TextBlock Text="FILES" FontWeight="SemiBold" VerticalAlignment="Center"/><Button Content="↻" DockPanel.Dock="Right" Padding="8,2" Click="Refresh_Click"/></DockPanel>
+      <DockPanel><TextBlock x:Name="FileHeading" Text="LOCAL FILES" FontWeight="SemiBold" VerticalAlignment="Center"/><Button Content="↻" DockPanel.Dock="Right" Padding="8,2" Click="Refresh_Click"/></DockPanel>
       <TextBlock x:Name="PathText" Grid.Row="1" TextTrimming="CharacterEllipsis" Foreground="{StaticResource Muted}" Margin="0,6"/>
       <ListView x:Name="FileList" Grid.Row="2" Background="#0B1117" Foreground="#569DE5" BorderThickness="0" MouseDoubleClick="FileList_DoubleClick">
        <ListView.Resources>
