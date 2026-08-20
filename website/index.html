@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="SiliPuTTY is an open-source Windows terminal workspace for PowerShell, Kali/WSL, SSH, network tools, and synchronized file browsing.">
+  <meta name="theme-color" content="#101914">
+  <title>SiliPuTTY — A friendlier terminal workspace for Windows</title>
+  <link rel="icon" href="assets/siliputty.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="SiliPuTTY home">
+      <img src="assets/siliputty.png" width="32" height="32" alt="">
+      <span>SiliPuTTY</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#features">Features</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="https://github.com/CtrlAltWiz/SiliPuTTY/discussions">Discussions</a>
+      <a class="nav-github" href="https://github.com/CtrlAltWiz/SiliPuTTY">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> Open source · Windows x64 · Alpha</p>
+        <h1>Your terminals.<br><span>Your tools.</span> One workspace.</h1>
+        <p class="lede">SiliPuTTY is PuTTY’s quirky cousin—a Windows workspace for PowerShell, Kali through WSL, persistent SSH sessions, platform-aware commands, network utilities, and live file browsing.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/CtrlAltWiz/SiliPuTTY/releases/latest">Download latest release</a>
+          <a class="button secondary" href="https://github.com/CtrlAltWiz/SiliPuTTY">View source</a>
+        </div>
+        <p class="release-note">Current release: <strong>0.3.3-alpha</strong> · Self-contained .NET 10 build</p>
+      </div>
+
+      <div class="terminal-card" aria-label="Illustration of a SiliPuTTY SSH session">
+        <div class="terminal-bar">
+          <span></span><span></span><span></span>
+          <p>SSH · core-switch-01</p>
+        </div>
+        <div class="terminal-body">
+          <p><i>$</i> ssh admin@core-switch-01</p>
+          <p class="muted">Detecting remote platform…</p>
+          <p><b>✓</b> Platform: Cisco IOS</p>
+          <p><b>✓</b> Session tools ready</p>
+          <div class="tool-row">
+            <span>Interfaces</span><span>Routes</span><span>VLANs</span>
+          </div>
+          <p><i>core-switch-01#</i><span class="cursor"></span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section-heading">
+        <p class="eyebrow">Built for practical work</p>
+        <h2>More than another terminal window</h2>
+        <p>Keep the sessions, commands, files, and diagnostics you need in one focused desktop application.</p>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <span class="feature-icon">›_</span>
+          <h3>Persistent sessions</h3>
+          <p>Run independent PowerShell, Kali/WSL, and SSH tabs with reconnect, interrupt, and disconnect controls.</p>
+        </article>
+        <article>
+          <span class="feature-icon">◎</span>
+          <h3>Platform-aware tools</h3>
+          <p>Get useful command palettes for Windows, Linux, macOS, Cisco, Aruba, Fortinet, Palo Alto, Juniper, and generic appliances.</p>
+        </article>
+        <article>
+          <span class="feature-icon">↔</span>
+          <h3>Live file browsing</h3>
+          <p>Navigate local and remote folders alongside your authenticated session, with convenient File Explorer integration.</p>
+        </article>
+        <article>
+          <span class="feature-icon">⌁</span>
+          <h3>Network visibility</h3>
+          <p>Discover authorized private networks, inspect common services, export results, and integrate with Wireshark and TShark.</p>
+        </article>
+        <article>
+          <span class="feature-icon">◆</span>
+          <h3>Secrets handled carefully</h3>
+          <p>Use masked secret entry, host-key warnings, and profiles that store configuration without storing passwords.</p>
+        </article>
+        <article>
+          <span class="feature-icon">{ }</span>
+          <h3>Extensible by design</h3>
+          <p>Add explicitly enabled, validated JSON plugins for command-line tools already installed on your system.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="platform-strip" aria-label="Supported platform profiles">
+      <p>Platform profiles</p>
+      <div><span>Windows</span><span>Linux</span><span>macOS</span><span>Cisco</span><span>Aruba</span><span>Fortinet</span><span>Palo Alto</span><span>Juniper</span></div>
+    </section>
+
+    <section class="section roadmap" id="roadmap">
+      <div class="section-heading">
+        <p class="eyebrow">Where it’s going</p>
+        <h2>The road beyond alpha</h2>
+        <p>SiliPuTTY is ready for controlled testing while the foundation for a fuller terminal and network-operations workspace takes shape.</p>
+      </div>
+      <ol class="milestones">
+        <li><span>01</span><div><h3>Modern terminal rendering</h3><p>ConPTY-backed VT rendering, ANSI support, resize events, and better full-screen application behavior.</p></div></li>
+        <li><span>02</span><div><h3>Deeper connectivity</h3><p>Raw, Telnet, Rlogin, Serial, SSH forwarding, jump hosts, proxy routing, and host-key management.</p></div></li>
+        <li><span>03</span><div><h3>Better file and network workflows</h3><p>Integrated transfer tools, richer packet inspection, Wake-on-LAN, and optional RDP launching.</p></div></li>
+        <li><span>04</span><div><h3>A stronger ecosystem</h3><p>More appliance profiles, plugin capabilities, automated coverage, documentation, and polished releases.</p></div></li>
+      </ol>
+      <div class="roadmap-link"><a href="https://github.com/CtrlAltWiz/SiliPuTTY/blob/main/FEATURES.md">Explore the full capability matrix →</a></div>
+    </section>
+
+    <section class="feedback">
+      <div>
+        <p class="eyebrow">Help shape SiliPuTTY</p>
+        <h2>Built in the open, with room for your ideas.</h2>
+        <p>Feedback from terminal users, system administrators, network engineers, security professionals, and curious tinkerers is welcome. Tell us what would make SiliPuTTY useful in your workflow.</p>
+      </div>
+      <div class="actions">
+        <a class="button light" href="https://github.com/CtrlAltWiz/SiliPuTTY/discussions">Join the discussion</a>
+        <a class="button outline-light" href="https://github.com/CtrlAltWiz/SiliPuTTY/issues">Report an issue</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand"><img src="assets/siliputty.png" width="26" height="26" alt=""><span>SiliPuTTY</span></div>
+    <p>Free and open-source software licensed under the MIT License.</p>
+    <div><a href="https://github.com/CtrlAltWiz/SiliPuTTY">GitHub</a><a href="https://github.com/CtrlAltWiz/SiliPuTTY/releases">Releases</a><a href="https://github.com/CtrlAltWiz/SiliPuTTY/blob/main/SECURITY.md">Security</a></div>
+  </footer>
+</body>
+</html>
