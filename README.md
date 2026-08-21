@@ -1,3 +1,5 @@
+<img alt="Static Badge" src="https://img.shields.io/badge/Build-Alpha-blue%3Flogo%3Dgithub?logo=github&labelColor=black&color=lightgreen"> <img alt="Static Badge" src="https://img.shields.io/badge/Network-Tools-blue"> <img alt="Static Badge" src="https://img.shields.io/badge/License-MIT-blue%3Flogo%3Dgithub">
+
 # What on Earth is SiliPuTTY?! <img width="32" height="32" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" />
 
 <img width="1241" height="757" alt="image" src="https://github.com/user-attachments/assets/7297ccd8-fe62-42e4-9bc4-d6d7be10fa3a" />
