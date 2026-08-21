@@ -5,7 +5,7 @@
 <img width="1241" height="757" alt="image" src="https://github.com/user-attachments/assets/7297ccd8-fe62-42e4-9bc4-d6d7be10fa3a" />
 
 
-<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> This app is like PuTTY’s quirky cousin for Windows terminals, packing local PowerShell, Kali Linux through WSL, SSH command magic, one-click Kali gadget access, and a live file browser that’s always in sync.
+<img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> This app is like PuTTY’s quirky cousin, packing local PowerShell, Kali Linux through WSL, SSH, one-click command access, and a live file browser that stays in sync.
 
 <img width="18" height="18" alt="siliputty" src="https://github.com/user-attachments/assets/061a9ceb-814b-4603-81f9-06ab142f60c7" /> The app spots whether you're on Windows, Linux, or macOS as soon as you connect and then whips up a session-tool palette packed with commands that actually make sense for your platform. If it stumbles upon an unfamiliar SSH platform, it just shrugs and defaults to a generic appliance profile for switches, routers, and firewalls. And if you’re feeling rebellious, the Platform menu lets you override its guesswork whenever you want.
 
@@ -20,7 +20,7 @@
 | Platform | Windows x64; self-contained .NET 10 build |
 | Notable update | Quiet remote browsing and Windows File Explorer integration |
 
-This version stops background SSH file polling from echoing encoded listing commands into the terminal. Remote listings now refresh on connect, navigation, or demand, and a new right-click action opens local paths or accessible Windows administrative-share paths in File Explorer.
+This version stops background SSH file polling from echoing weird encoded listing commands into the terminal. Remote listings now refresh on connect, navigation, or demand, and a new right-click action opens local paths or accessible Windows administrative-share paths in File Explorer.
 
 ## Highlights
 
@@ -40,7 +40,7 @@ This version stops background SSH file polling from echoing encoded listing comm
 
 ## Requirements
 
-SiliPuTTY runs on Windows. The self-contained package includes the required .NET runtime.
+SiliPuTTY currently runs on Windows. The self-contained package includes the required .NET runtime.
 
 Runtime integrations are detected automatically:
 
@@ -54,6 +54,8 @@ Runtime integrations are detected automatically:
 | Npcap | Live packet-capture driver | Optional |
 
 SiliPuTTY does not silently download, install, or elevate external tools. Check **Network → Capabilities** after installing them.
+
+_We're still working on ports for Mac/Linux. Check the roadmap for upcoming platform compatibility!_
 
 ## Getting started
 
